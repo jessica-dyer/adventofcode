@@ -86,3 +86,30 @@ findDepthIncrease(input) ##Answer: 1288
 # than the previous sum?
 
 # Puzzle input is still 'input' from puzzle 1.
+
+findDepthIncreaseThree <- function(inputArray) {
+        # initiate counter (integer)
+        counter <- 0
+        previousIndexStart <- 1
+        currentIndexStart <- previousIndexStart+1
+        
+        # loop over the array
+        for(index in 1:length(inputArray)) {
+                # initiate previous three values (index through three)
+                previousThreeValues <- inputArray[previousIndexStart:(previousIndexStart+2)]
+                print(previousThreeValues)
+                previousIndexStart <- previousIndexStart + 2
+                # sum previous three values      
+                
+                # initiate current three values in array (index +3 through three more)
+                currentThreeValues <- inputArray[currentIndexStart:(currentIndexStart+2)]
+                print(currentThreeValues)
+                currentIndexStart <- previousIndexStart+1
+                # sum current three values
+               
+        }
+        
+        # return counter
+}
+
+findDepthIncreaseThree(testInput)
