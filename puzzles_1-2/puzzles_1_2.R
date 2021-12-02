@@ -87,9 +87,12 @@ findDepthIncrease(input) ##Answer: 1288
 
 # Puzzle input is still 'input' from puzzle 1.
 
+## Write a function that returns a new array of sums of windows of three
+## Takes: an array of numbers
+## Returns: new array of sums of windows of three
 findDepthIncreaseThree <- function(inputArray) {
-        # initiate counter (integer)
-        counter <- 0
+        # initiate new vector (integers)
+        newVector <- NULL
         previousIndexStart <- 1
         currentIndexStart <- previousIndexStart+1
         
@@ -97,19 +100,25 @@ findDepthIncreaseThree <- function(inputArray) {
         for(index in 1:length(inputArray)) {
                 # initiate previous three values (index through three)
                 previousThreeValues <- inputArray[previousIndexStart:(previousIndexStart+2)]
-                print(previousThreeValues)
+                # sum previous three values
+                sumPreviousThree <- sum(previousThreeValues)
+                newVector <- append(newVector, sumPreviousThree)
+                
                 previousIndexStart <- previousIndexStart + 2
-                # sum previous three values      
+                
                 
                 # initiate current three values in array (index +3 through three more)
                 currentThreeValues <- inputArray[currentIndexStart:(currentIndexStart+2)]
-                print(currentThreeValues)
+                sumCurrentThree <- sum(currentThreeValues)
+                newVector <- append(newVector, sumCurrentThree)
+                
                 currentIndexStart <- previousIndexStart+1
                 # sum current three values
                
         }
-        
-        # return counter
+        newVector <- newVector[!is.na(newVector)]
+        return(newVector)
 }
 
-findDepthIncreaseThree(testInput)
+sumsOfThree <- findDepthIncreaseThree(input)
+findDepthIncrease(sumsOfThree) ## Answer: 1311
