@@ -42,3 +42,15 @@ testInput <- c('forward 5', 'down 5', 'forward 8', 'up 3', 'down 8', 'forward 2'
 # planned course. What do you get if you multiply your final horizontal position by 
 # your final depth?
 
+# Input: Array of strings of instructions i.e. 'forward 5'
+# Returns: Integer of depth * horizontal position
+
+calculatePosition <- function(arrayOfStrings) {
+        # Initiate horizontal position
+        # initiate depth 
+        # Loop over all strings in array
+        # for each string, pull apart the instruction and the number
+        # change number from string to number
+        # based on the instruction string add or subtract to horizontal position/depth
+        # return horizontal position * depth
+}
