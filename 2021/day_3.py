@@ -15,17 +15,22 @@ diagnostic_input = ["00100", "11110", "10110", "10111", "10101", "01111", "00111
 # Returns: most common bit or least common bit in the corresponding index of all strings in the diagnostic report
 
 def return_bit_by_position(array_of_bytes, index, min_max):
-    final_array = []
+    array_of_bits_in_same_position = []
     i = index
     for byte in array_of_bytes:
-        bits = list(byte)
-        bits = list(map(int, bits))
-        final_array.append(bits[i])
+        array_of_bits_in_same_position.append(byte[i])
     if min_max == 'max':
-        return mode(final_array)
+        ones = sum(array_of_bits_in_same_position)
+        zeros = len(array_of_bits_in_same_position) - ones
+        are_equal = ones == zeros
+        if are_equal:
+            return ones
+        return mode(array_of_bits_in_same_position)
     else:
-        count = Counter(final_array)
+        count = Counter(array_of_bits_in_same_position)
         values = [key for key, value in count.items() if value == min(count.values())]
+        if len(values) > 1:
+            return 0
         return values[0]
 
 
@@ -43,20 +48,21 @@ def binary_to_decimal(array_of_bits):
     return total
 
 
-length = len(list(new_array[0]))
-gamma_array = []
-for index in range(length):
-    current_bit = return_bit_by_position(new_array, index, 'max')
-    gamma_array.append(current_bit)
-gamma = binary_to_decimal(gamma_array)
+# length = len(list(new_array[0]))
+# gamma_array = []
+# for index in range(length):
+#     current_bit = return_bit_by_position(new_array, index, 'max')
+#     gamma_array.append(current_bit)
+# gamma = binary_to_decimal(gamma_array)
+#
+# epsilon_array = []
+# for index in range(length):
+#     current_bit = return_bit_by_position(new_array, index, 'min')
+#     epsilon_array.append(current_bit)
+# epsilon = binary_to_decimal(epsilon_array)
 
-epsilon_array = []
-for index in range(length):
-    current_bit = return_bit_by_position(new_array, index, 'min')
-    epsilon_array.append(current_bit)
-epsilon = binary_to_decimal(epsilon_array)
+# answer = gamma * epsilon
 
-answer = gamma * epsilon
 
 ###### PART 2 ######
 # O2 generator rating
@@ -64,6 +70,31 @@ answer = gamma * epsilon
 # Keep bytes that start with that number
 # Calculate the most common bit in position 2
 # Keep bytes that have that number in position 2
-# etc...
+# etc...until you have one value left and that is your oxygen generator rating
+
+def returnArrayOfIntegers(strings_of_bytes):
+    array_of_integers = []
+    for byte in strings_of_bytes:
+        current_bits = list(byte)
+        current_bits = list(map(int, current_bits))
+        array_of_integers.append(current_bits)
+    return array_of_integers
 
 
+arrayOfBytes = returnArrayOfIntegers(new_array)
+
+
+def filterForOxygenCo2Rating(array_of_bytes, min_max):
+    length = len(array_of_bytes[0])
+    filtered_array = array_of_bytes
+    for index in range(length):
+        common_bit_at_index = return_bit_by_position(filtered_array, index, min_max)
+        filtered_array = list(filter(lambda x: x[index] == common_bit_at_index, filtered_array))
+    decimal = binary_to_decimal(list(filtered_array[0]))
+    return decimal
+
+
+oxygen = filterForOxygenCo2Rating(arrayOfBytes, 'max')
+co2_scrubber = filterForOxygenCo2Rating(arrayOfBytes, 'min')
+
+answer = oxygen * co2_scrubber
