@@ -4,6 +4,8 @@ with open('submarine_input_1.txt') as f:
 test_input = ['forward 5', 'down 5', 'forward 8', 'up 3', 'down 8', 'forward 2']
 
 
+
+
 class Submarine:
     def __init__(self):
         self.currentHorizontalPosition = 0
