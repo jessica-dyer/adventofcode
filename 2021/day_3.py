@@ -12,7 +12,7 @@ diagnostic_input = ["00100", "11110", "10110", "10111", "10101", "01111", "00111
 
 
 # Takes: a string of bits i.e. '00100', '11110'
-# Returns: most common bit or least common bit in the corresponding index of all numbers in the diagnostic report
+# Returns: most common bit or least common bit in the corresponding index of all strings in the diagnostic report
 
 def return_bit_by_position(array_of_bytes, index, min_max):
     final_array = []
@@ -42,6 +42,7 @@ def binary_to_decimal(array_of_bits):
             total = total + base_2_array[index]
     return total
 
+
 length = len(list(new_array[0]))
 gamma_array = []
 for index in range(length):
@@ -55,4 +56,14 @@ for index in range(length):
     epsilon_array.append(current_bit)
 epsilon = binary_to_decimal(epsilon_array)
 
-answer = gamma*epsilon
+answer = gamma * epsilon
+
+###### PART 2 ######
+# O2 generator rating
+# Calculate the most common bit in position 1
+# Keep bytes that start with that number
+# Calculate the most common bit in position 2
+# Keep bytes that have that number in position 2
+# etc...
+
+
