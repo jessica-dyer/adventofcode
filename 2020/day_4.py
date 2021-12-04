@@ -29,16 +29,16 @@ def create_passport_dictionary(string_array):
 passport_data = create_passport_dictionary(array_of_dictionary_data)
 
 
+
+
 def isValidPassport(passport_dictionary: dict):
     keys_for_valid = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
     keys_for_current_pass = list(passport_dictionary.keys())
-
     for key in keys_for_valid:
         if key == 'cid':
             continue
         elif key not in keys_for_current_pass:
             return False
-
     return True
 
 

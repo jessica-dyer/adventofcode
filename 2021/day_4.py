@@ -20,27 +20,33 @@ random_numbers = list(map(int, random_numbers))
 
 
 class BingoBoard:
-    def __init__(self, board_data: list):
-        self.board = []
-        self.board_data = board_data
+    def __init__(self, board_as_array_of_arrays: list):
+        self.board = board_as_array_of_arrays
         self.moves_to_win = 0
         self.board_completed = False
         self.winning_number = None
         self.score = 0
 
-        self.board_data = list(self.board_data.split(' '))
-        self.board_data = list(filter(lambda x: x != '', self.board_data))
-        self.board_data = list(map(int, self.board_data))
+    # this returns a new bingo board instance
+    # board_data is currently a space separated string
+    @classmethod
+    def build_bingo_board_from_data_as_string(cls, board_data_as_string):
+        board_data_as_string = list(board_data_as_string.split(' '))
+        board_data_as_string = list(filter(lambda x: x != '', board_data_as_string))
+        board_data_as_string = list(map(int, board_data_as_string))
 
         # Generate bingo board 5x5
+        board = []
         current_array = []
-        for item in self.board_data:
+        for item in board_data_as_string:
             if len(current_array) < 5:
                 current_array.append(item)
             elif len(current_array) == 5:
-                self.board.append(current_array)
+                board.append(current_array)
                 current_array = [item]
-        self.board.append(current_array)
+        board.append(current_array)
+
+        return BingoBoard(board)
 
     def mark_number(self, random_number: int):
         if self.board_completed:
@@ -88,7 +94,7 @@ game_accumulator = []
 moves_to_win = []
 for num in range(len(array_of_bingo_data)):
     current_bingo_data = array_of_bingo_data[num]
-    bingo_board = BingoBoard(current_bingo_data)
+    bingo_board = BingoBoard.build_bingo_board_from_data_as_string(current_bingo_data)
     if not bingo_board.board_completed:
         for item in random_numbers:
             bingo_board.mark_number(item)
