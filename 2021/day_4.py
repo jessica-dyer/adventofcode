@@ -59,38 +59,38 @@ class BingoBoard:
         self.winning_number = random_number
         #     self.has_won()
 
-    def has_won(self):
+    def update_board_completed_status(self):
         if self.moves_to_win < 5:
-            return False
+            return
         for array in self.board:
             if array.count('X') == 5:
                 self.board_completed = True
-                return True
+                return
         for index in range(5):
-            x_accumulator = []
+            x_counter = 0
             for array in self.board:
                 if array[index] == 'X':
-                    x_accumulator.append('X')
-                    if len(x_accumulator) == 5:
+                    x_counter += 1
+                    if x_counter == 5:
                         self.board_completed = True
-                        return True
-            x_accumulator = []
-        return False
+                        return
+            x_counter = []
+        return
 
     def score_card(self):
         if not self.board_completed:
-            pass
+            return
         else:
             total_sum = 0
             for array in self.board:
-                current_array = list(filter(lambda x: x != 'X', array))
-                if len(current_array) != 0:
-                    current_sum = functools.reduce(lambda a, b: a + b, current_array)
+                remaining_numbers_array = list(filter(lambda x: x != 'X', array))
+                if len(remaining_numbers_array) != 0:
+                    current_sum = functools.reduce(lambda a, b: a + b, remaining_numbers_array)
                     total_sum += current_sum
             self.score = total_sum * self.winning_number
 
 
-game_accumulator = []
+completed_games = []
 moves_to_win = []
 for num in range(len(array_of_bingo_data)):
     current_bingo_data = array_of_bingo_data[num]
@@ -98,16 +98,16 @@ for num in range(len(array_of_bingo_data)):
     if not bingo_board.board_completed:
         for item in random_numbers:
             bingo_board.mark_number(item)
-            bingo_board.has_won()
+            bingo_board.update_board_completed_status()
             bingo_board.score_card()
             if bingo_board.board_completed:
-                game_accumulator.append(bingo_board)
+                completed_games.append(bingo_board)
                 moves_to_win.append(bingo_board.moves_to_win)
                 break
 
 winning_game_index = moves_to_win.index(min(moves_to_win))
-answer = game_accumulator[winning_game_index].score
+answer = completed_games[winning_game_index].score
 
 # Part 2
 losing_game_index = moves_to_win.index(max(moves_to_win))
-answer_part_2 = game_accumulator[losing_game_index].score
+answer_part_2 = completed_games[losing_game_index].score
