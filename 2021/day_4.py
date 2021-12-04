@@ -25,7 +25,7 @@ class BingoBoard:
         self.moves_to_win = 0
         self.board_completed = False
         self.winning_number = None
-        self.score = 0
+        # self.score = 0
 
     # this returns a new bingo board instance
     # board_data is currently a space separated string
@@ -77,9 +77,10 @@ class BingoBoard:
             x_counter = []
         return
 
-    def score_card(self):
+    # returns an integer
+    def score(self):
         if not self.board_completed:
-            return
+            return 0
         else:
             total_sum = 0
             for array in self.board:
@@ -87,7 +88,8 @@ class BingoBoard:
                 if len(remaining_numbers_array) != 0:
                     current_sum = functools.reduce(lambda a, b: a + b, remaining_numbers_array)
                     total_sum += current_sum
-            self.score = total_sum * self.winning_number
+            score = total_sum * self.winning_number
+            return score
 
 
 completed_games = []
@@ -99,15 +101,14 @@ for num in range(len(array_of_bingo_data)):
         for item in random_numbers:
             bingo_board.mark_number(item)
             bingo_board.update_board_completed_status()
-            bingo_board.score_card()
             if bingo_board.board_completed:
                 completed_games.append(bingo_board)
                 moves_to_win.append(bingo_board.moves_to_win)
                 break
 
 winning_game_index = moves_to_win.index(min(moves_to_win))
-answer = completed_games[winning_game_index].score
+answer = completed_games[winning_game_index].score()
 
 # Part 2
 losing_game_index = moves_to_win.index(max(moves_to_win))
-answer_part_2 = completed_games[losing_game_index].score
+answer_part_2 = completed_games[losing_game_index].score()
