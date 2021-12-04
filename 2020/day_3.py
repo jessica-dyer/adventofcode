@@ -15,24 +15,33 @@ class LandMap:
             temp_topo = (list(topo))
             self.map_of_land.append(temp_topo)
 
+    def isTreeAt(self, vertical_position, horizontal_position):
+        return self.map_of_land[vertical_position][horizontal_position] == '#'
+
+    def maxHorizontalLength(self):
+        return len(self.map_of_land[0]) ## Making an assumption that all same length;
+
+    def maxHeight(self):
+        return len(self.map_of_land)
+
 
 class Traveller:
-    def __init__(self, map_of_land: LandMap):
+    def __init__(self, map_of_land: 'array of strings'):
         self.horizontal_position = 0
         self.vertical_position = 0
         self.map_object = LandMap(map_of_land)
-        self.horizontal_position_is_max = False
 
     def isOnTree(self):
-        return self.map_object.map_of_land[self.vertical_position][self.horizontal_position] == '#'
+        return self.map_object.isTreeAt(self.vertical_position, self.horizontal_position)
 
     def move(self, right: int, down: int):
-        max_horizontal_index = len(self.map_object.map_of_land[0])-1
-        for num in range(right):
-            if self.horizontal_position == max_horizontal_index:
-                self.horizontal_position = -1
-            self.horizontal_position += 1
-        self.vertical_position += down
+        horizontal_length = self.map_object.maxHorizontalLength()
+        self.horizontal_position = (self.horizontal_position + right) % horizontal_length
+        temp_vertical_position = self.vertical_position + down
+        if temp_vertical_position < self.map_object.maxHeight():
+            self.vertical_position += down
+        else:
+            print('Stopped because bottom of the map was reached.')
 
     def reset(self, horizontal_position, vertical_position):
         self.horizontal_position = horizontal_position
@@ -46,4 +55,4 @@ while mountainWoman.vertical_position < len(mountainWoman.map_object.map_of_land
     bool = mountainWoman.isOnTree()
     boolean_array.append(bool)
 
-answer = sum(boolean_array) # 80*162*77*83*37
+answer = sum(boolean_array) # 80*162*77*83*37 (1,2)=37 trees
