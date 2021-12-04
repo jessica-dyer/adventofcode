@@ -45,6 +45,7 @@ def create_passport_from_dictionary(dictionary: dict):
             passport_fields.append(PassportIdField(key, value_string))
     return Passport(passport_fields)
 
+
 def create_passports(string_array):
     array_of_dictionaries = []
     for item in string_array:
@@ -84,6 +85,7 @@ class Passport:
     def completely_valid(self):
         return self.all_field_keys_exist() and self.all_fields_values_are_valid()
 
+
 class PassportField(ABC):
     def __init__(self, key_string, value_string):
         self.key_string = key_string
@@ -120,25 +122,43 @@ class ExpirationYearField(YearField):
     def __init__(self, key_string, value_string):
         super().__init__(key_string, value_string, 2020, 2030)
 
+
 class HeightField(PassportField):
     def is_valid(self):
-        # TODO: Little Wiggles, write me!
-        return False
+        string_length = len(self.value_string)
+        if string_length < 3:
+            return False
+        units = self.value_string[string_length - 2: string_length]
+        try:
+            amplitude = int(self.value_string[0:string_length - 2])
+        except:
+            print("That's not a number!")
+            return False
+        if units == 'cm':
+            return 150 <= amplitude <= 193
+        elif units == 'in':
+            return 59 <= amplitude <= 76
+        else:
+            return False
+
 
 class HairColorField(PassportField):
     def is_valid(self):
         # TODO: Little Wiggles, write me!
         return False
 
+
 class EyeColorField(PassportField):
     def is_valid(self):
         # TODO: Little Wiggles, write me!
         return False
 
+
 class PassportIdField(PassportField):
     def is_valid(self):
         # TODO: Little Wiggles, write me!
         return False
+
 
 class CountryIdField(PassportField):
     def is_valid(self):
