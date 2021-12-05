@@ -1,6 +1,6 @@
 from abc import *
 
-with open('day_4_input.txt') as f:
+with open('day_4_input_test.txt') as f:
     passport_data_strings_array = []
     passport_pieces_accumulator = ''
     for line in f:
@@ -171,7 +171,6 @@ class EyeColorField(PassportField):
 
 class PassportIdField(PassportField):
     def is_valid(self):
-        # if len(self.value_string) < 9 < len(self.value_string):
         if len(self.value_string) != 9:
             return False
         elif not self.value_string.isnumeric():
@@ -187,7 +186,7 @@ for passport in passports:
     if passport.completely_valid():
         counter += 1
 
-for passport in passports:
-    field = passport.get_field('pid')
-    if field is not None:
-        print(field.value_string + '\t' + 'True' if field.is_valid() else ' ')
+# for passport in passports:
+#     field = passport.get_field('pid')
+#     if field is not None:
+#         print(field.value_string + '\t' + 'True' if field.is_valid() else ' ')
