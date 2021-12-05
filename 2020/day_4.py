@@ -15,7 +15,7 @@ with open('day_4_input.txt') as f:
     passport_data_strings_array.append(passport_pieces_accumulator)
 
 
-## turn each array into a dictionary
+# turn each array into a dictionary
 def create_passport_dictionary(passport_data_as_string):
     key_value_pairs = passport_data_as_string.split(' ')
     current_dictionary = {}
@@ -60,6 +60,12 @@ def create_passports(string_array):
 class Passport:
     def __init__(self, array_of_passport_fields: list):
         self.fields = array_of_passport_fields
+
+    def get_field(self, key_string):
+        for field in self.fields:
+            if field.key_string == key_string:
+                return field
+        return None
 
     def all_fields_values_are_valid(self):
         for field in self.fields:
@@ -144,46 +150,44 @@ class HeightField(PassportField):
 
 class HairColorField(PassportField):
     def is_valid(self):
-        # TODO: Little Wiggles, write me!
-        return False
+        if len(self.value_string) != 7:
+            return False
+        elif self.value_string[0] != '#':
+            return False
+        else:
+            valid_alnum = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
+            for alnum in self.value_string[1:7]:
+                if alnum not in valid_alnum:
+                    return False
+        return True
 
 
 class EyeColorField(PassportField):
     def is_valid(self):
-        # TODO: Little Wiggles, write me!
-        return False
+        eye_color_string = self.value_string
+        valid_eye_colors = ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
+        return eye_color_string in valid_eye_colors
 
 
 class PassportIdField(PassportField):
     def is_valid(self):
-        # TODO: Little Wiggles, write me!
-        return False
-
-
-class CountryIdField(PassportField):
-    def is_valid(self):
-        # TODO: Little Wiggles, write me!
-        return False
+        # if len(self.value_string) < 9 < len(self.value_string):
+        if len(self.value_string) != 9:
+            return False
+        elif not self.value_string.isnumeric():
+            return False
+        return True
 
 
 passports = create_passports(passport_data_strings_array)
-# def isValidPassport(passport_dictionary: dict):
-#     keys_for_valid = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
-#     keys_for_current_pass = list(passport_dictionary.keys())
-#     for key in keys_for_valid:
-#         if key == 'cid':
-#             continue
-#         elif key not in keys_for_current_pass:
-#             return False
-#     # if passport_dictionary['byr'] = not >= 1920 & not <= 2002:
-#     #     return False
-#
-#     return True
 
+counter = 0
 
-# array_of_booleans = []
-# for item in passport_data:
-#     bool = isValidPassport(item)
-#     array_of_booleans.append(bool)
-#
-# answer = sum(array_of_booleans)
+for passport in passports:
+    if passport.completely_valid():
+        counter += 1
+
+for passport in passports:
+    field = passport.get_field('pid')
+    if field is not None:
+        print(field.value_string + '\t' + 'True' if field.is_valid() else ' ')
