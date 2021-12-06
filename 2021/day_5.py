@@ -1,4 +1,4 @@
-with open('day_5_input.txt') as f:
+with open('day_5_input_test.txt') as f:
     array_of_coordinates = []
     for line in f:
         line = line.strip()
@@ -45,7 +45,7 @@ def build_coordinate_system(max_x, max_y):
     return plane
 
 
-plane = build_coordinate_system(1000, 1000)
+plane = build_coordinate_system(15, 15)
 
 
 def return_key_at_min(dictionary, key1, key2):
@@ -78,21 +78,22 @@ def mark_geothermal_vent(dictionary_of_coordinates: dict, plane):
         key_at_max = return_key_at_max(dictionary_of_coordinates, 'y1', 'y2')
         for i in range(dictionary_of_coordinates[key_at_min], (dictionary_of_coordinates[key_at_max] + 1)):
             plane[i][dictionary_of_coordinates['x1']] += 1
-    elif is_diagonal_line:
-        first_x = return_key_at_min(dictionary_of_coordinates, 'x1', 'x2')
-        if first_x == 'x1':
-            first_y = 'y1'
-            second_x = 'x2'
-            second_y = 'y2'
-        else:
-            first_y = 'y2'
-            second_x = 'x1'
-            second_y = 'y1'
-
-        upslope = dictionary_of_coordinates[first_y] > dictionary_of_coordinates[second_y]
-        if upslope:
-            for i in range(dictionary_of_coordinates[first_x])
-
+    # elif is_diagonal_line:
+    #     first_x = return_key_at_min(dictionary_of_coordinates, 'x1', 'x2')
+    #     if first_x == 'x1':
+    #         first_y = 'y1'
+    #         second_x = 'x2'
+    #         second_y = 'y2'
+    #     else:
+    #         first_y = 'y2'
+    #         second_x = 'x1'
+    #         second_y = 'y1'
+    #
+    #     upslope = dictionary_of_coordinates[first_y] > dictionary_of_coordinates[second_y]
+    #     if upslope:
+    #         for i in range(dictionary_of_coordinates[first_x], dictionary_of_coordinates[second_x]+1):
+    #             for num in range(dictionary_of_coordinates[second_y], dictionary_of_coordinates[first_y]+1):
+    #                 plane[num][i] += 1
     return plane
 
 
