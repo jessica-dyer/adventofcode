@@ -16,6 +16,16 @@ for n in range(max_crab_position + 10):
         fuel_used += num
     fuel_lookup_table.append(fuel_used)
 
+fuel_lookup_table_2 = []
+first_number = 1
+for n in range(max_crab_position + 10):
+    if n == 0:
+        fuel_used = 0
+        fuel_lookup_table_2.append(fuel_used)
+    else:
+        fuel_used = int((n/2)*(first_number + n))
+        fuel_lookup_table_2.append(fuel_used)
+
 for num in range(max_crab_position + 1):
     current_cummulative_moves = 0
     for position in array_of_crab_positions:
