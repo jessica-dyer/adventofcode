@@ -4,104 +4,78 @@ with open('day_5_input_test.txt') as f:
         line = line.strip()
         array_of_coordinates.append(line)
 
-array_dictionary_of_coord = []
+array_of_coord = []
 for string in array_of_coordinates:
-    current_dictionary = {}
     parsed_string = string.split('->')
     first_coord = parsed_string[0].split(',')
     second_coord = parsed_string[1].split(',')
-    current_dictionary['x1'] = int(first_coord[0])
-    current_dictionary['y1'] = int(first_coord[1])
-    current_dictionary['x2'] = int(second_coord[0])
-    current_dictionary['y2'] = int(second_coord[1])
-    array_dictionary_of_coord.append(current_dictionary)
-
-max_x = 0
-max_y = 0
-
-for dictionary in array_dictionary_of_coord:
-    current_x1 = dictionary['x1']
-    current_x2 = dictionary['x2']
-    if current_x1 > max_x:
-        max_x = current_x1
-    if current_x2 > max_x:
-        max_x = current_x2
-
-    current_y1 = dictionary['y1']
-    current_y2 = dictionary['y2']
-    if current_y1 > max_y:
-        max_y = current_y1
-    if current_y2 > max_y:
-        max_y = current_y2
+    current_array_of_tuples = [(int(first_coord[0]), int(first_coord[1])), (int(second_coord[0]), int(second_coord[1]))]
+    array_of_coord.append(current_array_of_tuples)
 
 
-def build_coordinate_system(max_x, max_y):
-    plane = []
-    for index in range(max_y):
-        x_array = []
-        for i in range(max_x):
-            x_array.append(0)
-        plane.append(x_array)
-    return plane
+class Coordinate:
+    def __init__(self, coordinates: tuple):
+        self.x = coordinates[0]
+        self.y = coordinates[1]
 
 
-plane = build_coordinate_system(15, 15)
+class Line:
+    def __init__(self, point_a: Coordinate, point_b: Coordinate):
+        self.line_type = None
+        self.point_a = point_a
+        self.point_b = point_b
+        if self.point_a.x == self.point_b.x:
+            self.line_type = 'vertical'
+        elif self.point_a.y == self.point_b.y:
+            self.line_type = 'horizontal'
+        else:
+            self.line_type = 'diagonal'
+
+    def draw(self, canvas):
+        if self.line_type == 'horizontal':
+            if self.point_a_is_leftmost_coordinate():
+                for i in range(self.point_a.x, self.point_b.x + 1):
+                    canvas.canvas[self.point_a.y][i] += 1
+            else:
+                for i in range(self.point_b.x, self.point_a.x + 1):
+                    canvas.canvas[self.point_b.y][i] += 1
+        if self.line_type == 'vertical':
+            if self.point_a_is_leftmost_coordinate():
+                for i in range(self.point_a.y, self.point_b.y + 1):
+                    canvas.canvas[i][self.point_a.x] += 1
+            else:
+                for i in range(self.point_b.y, self.point_a.y + 1):
+                    canvas.canvas[i][self.point_b.x] += 1
+        if self.line_type == 'diagonal':
 
 
-def return_key_at_min(dictionary, key1, key2):
-    min = dictionary[key1]
-    if dictionary[key2] < min:
-        return key2
-    return key1
+    # returns a boolean
+    def point_a_is_leftmost_coordinate(self):
+        if self.line_type == 'horizontal':
+            return self.point_a.x < self.point_b.x
+        elif self.line_type == 'vertical':
+            return self.point_a.y < self.point_b.y
 
 
-def return_key_at_max(dictionary, key1, key2):
-    max = dictionary[key1]
-    if dictionary[key2] > max:
-        return key2
-    return key1
 
+class Canvas:
+    def __init__(self, canvas_as_array_of_arrays: list):
+        self.canvas = canvas_as_array_of_arrays
 
-def mark_geothermal_vent(dictionary_of_coordinates: dict, plane):
-    is_horizontal_line = dictionary_of_coordinates['y1'] == dictionary_of_coordinates['y2']
-    is_vertical_line = dictionary_of_coordinates['x1'] == dictionary_of_coordinates['x2']
-    if not is_horizontal_line and not is_vertical_line:
-        is_diagonal_line = True
+    @classmethod
+    def build(cls, width, height):
+        canvas = []
+        for index in range(height):
+            x_array = []
+            for i in range(width):
+                x_array.append(0)
+            canvas.append(x_array)
+        return Canvas(canvas)
 
-    if is_horizontal_line:
-        key_at_min = return_key_at_min(dictionary_of_coordinates, 'x1', 'x2')
-        key_at_max = return_key_at_max(dictionary_of_coordinates, 'x1', 'x2')
-        for i in range(dictionary_of_coordinates[key_at_min], (dictionary_of_coordinates[key_at_max] + 1)):
-            plane[dictionary_of_coordinates['y1']][i] += 1
-    elif is_vertical_line:
-        key_at_min = return_key_at_min(dictionary_of_coordinates, 'y1', 'y2')
-        key_at_max = return_key_at_max(dictionary_of_coordinates, 'y1', 'y2')
-        for i in range(dictionary_of_coordinates[key_at_min], (dictionary_of_coordinates[key_at_max] + 1)):
-            plane[i][dictionary_of_coordinates['x1']] += 1
-    # elif is_diagonal_line:
-    #     first_x = return_key_at_min(dictionary_of_coordinates, 'x1', 'x2')
-    #     if first_x == 'x1':
-    #         first_y = 'y1'
-    #         second_x = 'x2'
-    #         second_y = 'y2'
-    #     else:
-    #         first_y = 'y2'
-    #         second_x = 'x1'
-    #         second_y = 'y1'
-    #
-    #     upslope = dictionary_of_coordinates[first_y] > dictionary_of_coordinates[second_y]
-    #     if upslope:
-    #         for i in range(dictionary_of_coordinates[first_x], dictionary_of_coordinates[second_x]+1):
-    #             for num in range(dictionary_of_coordinates[second_y], dictionary_of_coordinates[first_y]+1):
-    #                 plane[num][i] += 1
-    return plane
+canvas = Canvas.build(15, 15)
 
-
-for coordinates in array_dictionary_of_coord:
-    mark_geothermal_vent(coordinates, plane)
-
-count = 0
-for array in plane:
-    for i in array:
-        if i > 1:
-            count += 1
+for array in array_of_coord:
+    coordinate1 = Coordinate(array[0])
+    coordinate2 = Coordinate(array[1])
+    line = Line(coordinate1, coordinate2)
+    line.draw(canvas)
