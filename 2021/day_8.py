@@ -15,3 +15,21 @@ for item in output_values:
     for word in current_words:
         if len(word) == 2 or len(word) == 4 or len(word) == 3 or len(word) == 7:
             counter += 1
+
+# PART 2
+
+
+class SevenSegmentDisplay:
+    def __init__(self, board_as_array_of_arrays):
+        self.display = board_as_array_of_arrays
+
+    @classmethod
+    def build_display(cls, array_of_seven_letters: list):
+        display = []
+
+        for num in range()
+
+        return SevenSegmentDisplay()
+
+
+
