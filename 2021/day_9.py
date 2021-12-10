@@ -1,6 +1,6 @@
 from enum import Enum
 
-with open('day_9_input_test.txt') as f:
+with open('day_9_input.txt') as f:
     array_of_heights = []
     for line in f:
         current_array_of_heights = []
@@ -59,17 +59,17 @@ class MapPoint(Enum):
 class BasinAreaMap:
     def __init__(self, height_map_objct):
         self.height_map = height_map_objct
-        self.row_length = self.height_map.max_columns
-        self.column_height = self.height_map.max_index_rows
-        self.basin_map = [self.create_empty_row() for x in range(self.column_height)]
+        self.column_count = self.height_map.max_columns
+        self.row_count = self.height_map.max_index_rows
+        self.basin_map = [self.create_empty_row() for x in range(self.row_count)]
         self.build_basin_map()
 
     def create_empty_row(self):
-        return [MapPoint.UNKNOWN for x in range(self.row_length)]
+        return [MapPoint.UNKNOWN for x in range(self.column_count)]
 
     def build_basin_map(self):
-        for row in range(self.column_height):
-            for column in range(self.row_length):
+        for row in range(self.row_count):
+            for column in range(self.column_count):
                 if self.height_map.return_value_at_coordinates(column, row) == 9:
                     self.basin_map[row][column] = MapPoint.NINE
                 else:
@@ -78,8 +78,8 @@ class BasinAreaMap:
     # Returns an array of ints
     def get_list_of_basin_areas(self):
         list_of_basin_areas = []
-        for row in range(self.column_height):
-            for column in range(self.row_length):
+        for row in range(self.row_count):
+            for column in range(self.column_count):
                 if self.basin_map[row][column] == MapPoint.BASIN_PART:
                     area_of_basin = self.count_of_basin_parts(row, column)
                     list_of_basin_areas.append(area_of_basin)
@@ -88,9 +88,9 @@ class BasinAreaMap:
     # Returns an integer that is the count of all contiguous basin parts
     # THIS IS A DESTRUCTIVE FUNCTION
     def count_of_basin_parts(self, row, column):
-        if row < 0 or row >= self.column_height:
+        if row < 0 or row >= self.row_count:
             return 0
-        if column < 0 or column >= self.row_length:
+        if column < 0 or column >= self.column_count:
             return 0
         if self.basin_map[row][column] != MapPoint.BASIN_PART:
             return 0
