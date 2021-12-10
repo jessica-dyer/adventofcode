@@ -1,4 +1,4 @@
-with open('day_9_input.txt') as f:
+with open('day_9_input_test.txt') as f:
     array_of_heights = []
     for line in f:
         current_array_of_heights = []
@@ -12,86 +12,39 @@ with open('day_9_input.txt') as f:
 # noinspection PyStatementEffect,PyUnreachableCode
 class HeightMap:
     def __init__(self, array_of_array_of_heights):
-        self.map = array_of_array_of_heights
-        self.max_index_rows = len(self.map)
-        self.max_columns = len(self.map[0])
+        self.master_map = array_of_array_of_heights
+        self.max_index_rows = len(self.master_map)
+        self.max_columns = len(self.master_map[0])
+
+    # It's okay to pass x and y coordinates out of bounds, in that case, None is returned.
+    def return_value_at_coordinates(self, x_coord, y_coord):
+        if x_coord < 0 or x_coord >= self.max_columns:
+            return None
+        if y_coord < 0 or y_coord >= self.max_index_rows:
+            return None
+        return self.master_map[y_coord][x_coord]
 
     def space_is_lowpoint(self, x_coord, y_coord):
-        is_top_row = y_coord == 0
-        is_bottom_row = y_coord == len(self.map) - 1
-        is_first_x = x_coord == 0
-        is_last_x = x_coord == len(self.map[y_coord]) - 1
-
-        if not is_top_row and not is_bottom_row and not is_first_x and not is_last_x:
-            if self.check_space_above(x_coord, y_coord) and self.check_space_right(x_coord,
-                                                                                   y_coord) and self.check_space_left(
-                    x_coord, y_coord) and self.check_space_below(x_coord, y_coord):
-                return True
-            return False
-
-        elif is_top_row and is_first_x:
-            if self.check_space_below(x_coord, y_coord) and self.check_space_right(x_coord, y_coord):
-                return True
-            return False
-
-        elif is_top_row and is_last_x:
-            if self.check_space_below(x_coord, y_coord) and self.check_space_left(x_coord, y_coord):
-                return True
-            return False
-
-        elif is_bottom_row and is_first_x:
-            if self.check_space_above(x_coord, y_coord) and self.check_space_right(x_coord, y_coord):
-                return True
-            return False
-
-        elif is_bottom_row and is_last_x:
-            if self.check_space_above(x_coord, y_coord) and self.check_space_left(x_coord, y_coord):
-                return True
-            return False
-
-        elif is_top_row:
-            if self.check_space_right(x_coord, y_coord) and self.check_space_left(x_coord,
-                                                                                  y_coord) and self.check_space_below(
-                    x_coord, y_coord):
-                return True
-            return False
-
-        elif is_bottom_row:
-            if self.check_space_right(x_coord, y_coord) and self.check_space_left(x_coord,
-                                                                                  y_coord) and self.check_space_above(
-                    x_coord, y_coord):
-                return True
-            return False
-
-        elif is_first_x:
-            if self.check_space_right(x_coord, y_coord) and self.check_space_below(x_coord,
-                                                                                   y_coord) and self.check_space_above(
-                    x_coord, y_coord):
-                return True
-            return False
-
-        elif is_last_x:
-            if self.check_space_left(x_coord, y_coord) and self.check_space_below(x_coord,
-                                                                                  y_coord) and self.check_space_above(
-                    x_coord, y_coord):
-                return True
-            return False
-
-    def check_space_above(self, x_coord, y_coord):
-        return self.map[y_coord][x_coord] < self.map[y_coord - 1][x_coord]
-
-    def check_space_left(self, x_coord, y_coord):
-        return self.map[y_coord][x_coord] < self.map[y_coord][x_coord - 1]
-
-    def check_space_right(self, x_coord, y_coord):
-        return self.map[y_coord][x_coord] < self.map[y_coord][x_coord + 1]
-
-    def check_space_below(self, x_coord, y_coord):
-        return self.map[y_coord][x_coord] < self.map[y_coord + 1][x_coord]
+        adjacent_values = []
+        current_value = self.return_value_at_coordinates(x_coord, y_coord)
+        # Check up, down, left, right
+        adjacent_values.append(self.return_value_at_coordinates(x_coord, y_coord - 1))
+        adjacent_values.append(self.return_value_at_coordinates(x_coord, y_coord + 1))
+        adjacent_values.append(self.return_value_at_coordinates(x_coord - 1, y_coord))
+        adjacent_values.append(self.return_value_at_coordinates(x_coord + 1, y_coord))
+        adjacent_values = list(filter(lambda x: x is not None, adjacent_values))
+        for num in adjacent_values:
+            if num < current_value:
+                return False
+        return True
 
     def calculate_risk_level(self, x_coord, y_coord):
         if self.space_is_lowpoint(x_coord, y_coord):
-            return self.map[y_coord][x_coord] + 1
+            return self.master_map[y_coord][x_coord] + 1
+
+
+
+
 
 
 sum_of_risk_level = 0
