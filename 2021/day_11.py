@@ -14,16 +14,21 @@ class Map:
         self.max_number_rows = len(self.master_map)
         self.max_number_cols = len(self.master_map[0])  # assuming all rows have the same length
 
+        for row in range(self.max_number_rows):
+            for column in range(self.max_number_cols):
+                self.master_map[row][column] = Octopus(self.master_map[row][column])
+
     # It's okay to pass x and y coordinates out of bounds, in that case, None is returned.
     def return_value_at_coordinates(self, row, column):
         if self.is_valid_position(row, column):
-            return self.master_map[row][column]
+            return self.master_map[row][column].energy_level
         else:
             return None
 
     def increment_value_at_coordinates(self, row, column):
         if self.is_valid_position(row, column):
-            self.master_map[row][column] += 1
+            if self.master_map[row][column].has_flashed_this_round is False:
+                self.master_map[row][column].energy_level += 1
 
     def is_valid_position(self, row, column):
         if column < 0 or column >= self.max_number_cols:
@@ -42,8 +47,13 @@ class OctopusEnergySimulation:
                 current_value = self.octo_energy_map.return_value_at_coordinates(row, col)
                 if current_value == 9:
                     self.increment_neighbors(row, col)
-                    self.octo_energy_map[row][col] = 0
-                dumbo_octopus_array_of_arrays[row][col] += 1
+                    self.octo_energy_map.master_map[row][col] = 0
+                    self.octo_energy_map.master_map[row][col].has_flashed_this_round = True
+                self.octo_energy_map.master_map[row][col].energy_level += 1
+
+        for row in range(self.octo_energy_map.max_number_rows):
+            for col in range(self.octo_energy_map.max_number_cols):
+                self.octo_energy_map.master_map[row][col].has_flashed_this_round = False
 
     def increment_neighbors(self, row, column):
         # above
@@ -63,9 +73,12 @@ class OctopusEnergySimulation:
 class Octopus:
     def __init__(self, energy_level):
         self.energy_level = energy_level
-        self.has_flashed_this_round = False 
-# Increment over all values in matrix and increment current value by one
-# If current value changes from 9 to 10, increment all values around that one by 1 (if they have not flashed this step)
+        self.has_flashed_this_round = False
+
+    def __repr__(self):
+        return f"'{self.energy_level}'"
+
+
 
 octo_sim = OctopusEnergySimulation(Map(dumbo_octopus_array_of_arrays))
 octo_sim.run_simulation()
