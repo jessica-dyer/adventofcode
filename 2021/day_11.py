@@ -1,4 +1,4 @@
-with open('day_11_input_test.txt') as f:
+with open('day_11_input.txt') as f:
     dumbo_octopus_array_of_arrays = []
     for line in f:
         line = line.strip()
@@ -13,6 +13,7 @@ class Map:
         self.master_map = array_of_arrays
         self.max_number_rows = len(self.master_map)
         self.max_number_cols = len(self.master_map[0])  # assuming all rows have the same length
+        self.simulation_reference = None
 
         for row in range(self.max_number_rows):
             for column in range(self.max_number_cols):
@@ -29,6 +30,8 @@ class Map:
         if self.is_valid_position(row, column):
             if self.master_map[row][column].has_flashed_this_round is False:
                 self.master_map[row][column].energy_level += 1
+                if self.master_map[row][column].energy_level > 9:
+                    self.simulation_reference.flash_at(row, column)
 
     def is_valid_position(self, row, column):
         if column < 0 or column >= self.max_number_cols:
@@ -37,23 +40,34 @@ class Map:
             return False
         return True
 
+
 class OctopusEnergySimulation:
     def __init__(self, map_object: Map):
         self.octo_energy_map = map_object
+        self.flash_counter = 0
+        self.octo_energy_map.simulation_reference = self
 
-    def run_simulation(self):
-        for row in range(self.octo_energy_map.max_number_rows):
-            for col in range(self.octo_energy_map.max_number_cols):
-                current_value = self.octo_energy_map.return_value_at_coordinates(row, col)
-                if current_value == 9:
-                    self.increment_neighbors(row, col)
-                    self.octo_energy_map.master_map[row][col] = 0
-                    self.octo_energy_map.master_map[row][col].has_flashed_this_round = True
-                self.octo_energy_map.master_map[row][col].energy_level += 1
-
+    def run_simulation_one_step(self):
         for row in range(self.octo_energy_map.max_number_rows):
             for col in range(self.octo_energy_map.max_number_cols):
                 self.octo_energy_map.master_map[row][col].has_flashed_this_round = False
+
+        for row in range(self.octo_energy_map.max_number_rows):
+            for col in range(self.octo_energy_map.max_number_cols):
+                self.octo_energy_map.increment_value_at_coordinates(row, col)
+
+    def did_all_flash(self):
+        for row in range(self.octo_energy_map.max_number_rows):
+            for col in range(self.octo_energy_map.max_number_cols):
+                if self.octo_energy_map.master_map[row][col].has_flashed_this_round is False:
+                    return False
+        return True
+
+    def flash_at(self, row, col):
+        self.octo_energy_map.master_map[row][col].energy_level = 0
+        self.octo_energy_map.master_map[row][col].has_flashed_this_round = True
+        self.increment_neighbors(row, col)
+        self.flash_counter += 1
 
     def increment_neighbors(self, row, column):
         # above
@@ -70,46 +84,20 @@ class OctopusEnergySimulation:
         self.octo_energy_map.increment_value_at_coordinates(row + 1, column - 1)
         self.octo_energy_map.increment_value_at_coordinates(row + 1, column + 1)
 
+
 class Octopus:
     def __init__(self, energy_level):
         self.energy_level = energy_level
         self.has_flashed_this_round = False
 
     def __repr__(self):
-        return f"'{self.energy_level}'"
-
+        return f"'{self.energy_level}'*"
 
 
 octo_sim = OctopusEnergySimulation(Map(dumbo_octopus_array_of_arrays))
-octo_sim.run_simulation()
-
-# def check_neighbors():
-
-
-# #     first loop over all octopi and reset flash ability
-# # second loop over all octopi and take a step_forward
-#
-#
-# class Octopus:
-#     def __init__(self, energy_level, map):
-#         self.energy_level = energy_level
-#         self.has_flashed_this_step = False
-#         self.map = map
-#
-#     def increment_energy_level(self):
-#         if not self.has_flashed_this_step:
-#             self.energy_level += 1
-#         if self.energy_level > 9:
-#             self.flash()
-#
-#     def flash(self):
-#         self.has_flashed_this_step = True
-#         # for all adjacent octopi call increment_energy_level
-#         self.energy_level = 0
-#
-#
-#     def reset_flash_ability(self):
-#         self.has_flashed_this_step = False
-#
-#     def step_forward(self):
-#         self.increment_energy_level()
+for num in range(300):
+    octo_sim.run_simulation_one_step()
+    if octo_sim.did_all_flash():
+        print(num + 1)
+        print(octo_sim.flash_counter)
+        break
