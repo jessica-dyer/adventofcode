@@ -55,5 +55,46 @@ def find_difference_max_min_in_dict():
 
 print(find_difference_max_min_in_dict())
 
-# PART 2 NEEDS TO BE LESS COMPUTATIONALLY INTENSIVE, NEED TO LOOP 40 TIMES. CAN WE USE BINS?
+# PART 2 NEEDS TO BE LESS COMPUTATIONALLY EXPENSIVE, NEED TO LOOP 40 TIMES. CAN WE USE BINS?
 
+with open('day_14_input.txt') as f:
+    s = ''
+    k = {}
+    for line in f:
+        line = line.strip()
+        if line == '':
+            continue
+        elif len(s) == 0:
+            s += line
+        else:
+            x, y = line.split(' -> ')
+            k[x] = y
+
+pc = {}
+for x, y in zip(s, s[1:]):
+    if x + y not in pc: pc[x + y] = 0
+    pc[x + y] += 1
+
+
+for _ in range(40):
+    npc = {}
+    for p in pc:
+        q = k[p]
+        if p[0] + q not in npc: npc[p[0] + q] = 0
+        npc[p[0] + q] += pc[p]
+        if q + p[1] not in npc: npc[q + p[1]] = 0
+        npc[q + p[1]] += pc[p]
+    pc = npc
+
+hc = {}
+tc = {}
+
+for p in pc:
+    if p[0] not in hc: hc[p[0]] = 0
+    if p[1] not in tc: tc[p[1]] = 0
+    hc[p[0]] += pc[p]
+    tc[p[1]] += pc[p]
+
+c = {x: max(hc.get(x, 0), tc.get(x, 0)) for x in set(hc) | set(tc)}
+
+print(max(c.values()) - min(c.values()))
