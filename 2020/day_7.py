@@ -84,46 +84,49 @@ for array in wrap_layers:
 
 # PART 2
 # start by looping through all bag rules and checking original bag_color. If bag color == 'shiny gold', return
-# dictionary of rules that should be contained.
+# array of bag_rules that should be contained.
 # add to counter the number of bags in each times the number of bags containing
 # loop through again until the final bags which carry nothing
 
-# Takes: the string 'shiny gold'
-# Returns: dictionary with what bags are inside shiny gold bags
-def search_for_original_bag_color(color):
+# Takes: a string
+# Returns: that bag rule from master list
+def search_for_one_bag_color(color):
     array_of_bag_rules = []
     for rule in bag_rules:
         if rule.bag_color == color:
             array_of_bag_rules.append(rule)
     return array_of_bag_rules
 
-
+# Takes: array of bag rules
+# Returns: array of bag rules that are contained within input bags
 def search_for_remaining_bag_colors(array_of_bag_rules: BagRule):
-    # do the math for the current number of bags available here from bag rules
-    # 1 dark olive, 2 vibrant plum
-
-    counter = {}
 
     array_of_new_bag_rules = []
     # Find how many bags each of the above bags must contain
     for rule in array_of_bag_rules:
         for key in rule.can_contain:
-            if key not in counter:
-                counter[key] = rule.can_contain[key]
-                array_of_new_bag_rules += search_for_original_bag_color(key)
-    print(counter)
-    if len(array_of_bag_rules) == 0:
-        return counter
-    return search_for_remaining_bag_colors(array_of_new_bag_rules)
+                array_of_new_bag_rules += search_for_one_bag_color(key)
+
+    return array_of_new_bag_rules
 
 
-foo = search_for_original_bag_color('shiny gold')
-boo = search_for_remaining_bag_colors(foo)
+foo = search_for_one_bag_color('shiny gold')
+# boo = search_for_remaining_bag_colors(foo)
+counter = 0
+for rule in foo:
+    for key in rule.can_contain:
+        current_num_of_bags = rule.can_contain[key]
+        new_array = search_for_one_bag_color(key)
+        for bag_rule in new_array:
+            counter += current_num_of_bags
+            for key in bag_rule.can_contain:
+                num_bags_contained = current_num_of_bags * bag_rule.can_contain[key]
+                counter += num_bags_contained
 
 
 
 
+# takes a bag color, multiplier
+# returns the sum of all nested bags below that (inclusive of current bag) i.e. if this is called with vibrant plum and 2, (5+6)*2 + 2 (original bags)
 
-
-
-
+def number_of_bags(bag_color: string, multiplier):
