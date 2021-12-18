@@ -1,4 +1,4 @@
-with open('day_15_input.txt') as f:
+with open('day_15_input_test.txt') as f:
     risk = []
     for line in f:
         line = line.strip()
