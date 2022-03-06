@@ -125,16 +125,22 @@ class Simulator:
     # find the first hit and then keep incrementing the y upwards until you stop getting hits
     y_value = 1
     was_previous_a_hit = False
+    had_any_hits = False
+    max_sane_y = x_value * 4
     while True:
       probe = Probe(x_value, y_value)
       distance = probe.launch_towards(target)
       is_hit = distance == 0
       if is_hit:
         self.probes_that_hit.append(probe)
+        had_any_hits = True
       if was_previous_a_hit and not is_hit and y_value > x_value:
-        return
+        break
+      if y_value > max_sane_y:
+        break
       y_value += 1
       was_previous_a_hit = is_hit
+    return had_any_hits
 
 
 # Fine all hits of the target
@@ -164,6 +170,9 @@ sim = Simulator()
 # sim.find_best_trajectory_for_x(12, target)
 first_x = sim.find_first_x_that_possibly_hits(target)
 # sim.find_best_trajectory_for_x(first_x, target)
-sim.find_all_hits_for_x(first_x, target)
+current_x = first_x
+while sim.find_all_hits_for_x(current_x, target):
+  current_x += 1
 print(sim.probes_that_hit)
+print(sorted(sim.probes_that_hit,  key = lambda x:x.highest_y)[-1].highest_y)
 # print(first_x)
