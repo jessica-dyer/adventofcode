@@ -1,4 +1,5 @@
 import re
+from xxlimited import new
 
 with open('day_17_input_test.txt') as f:
   coordinates = []
@@ -22,8 +23,18 @@ class Target:
       self.min_y = int(list_of_coordinates[1][1])
       self.max_y = int(list_of_coordinates[1][2])
 
+  def __get_distance(self, value: int, target_min, target_max):
+    if target_min <= value <= target_max:
+      return 0
+    if value < target_min:
+      return target_min - value
+    if value > target_max:
+      return value - target_max
+
   def distance_from_target(self, probe):
-    pass
+    x_distance = self.__get_distance(probe.current_position.x, self.min_x, self.max_x)
+    y_distance = self.__get_distance(probe.current_position.y, self.min_y, self.max_y)
+    return x_distance + y_distance
 
   def is_in_target(self, x_coord: int, y_coord: int):
     within_x = self.min_x <= x_coord <= self.max_x
@@ -60,32 +71,32 @@ class Probe:
       self.current_velocity = self.initial_velocity
       self.current_position = Coordinates(0, 0)
 
-  def launch(self):
-    count_of_measurements = 0
-    while count_of_measurements == 0:
-      position = (initial_velocity_x, initial_velocity_y)
-      self.list_of_positions.append(position)
-      self.list_of_velocities.append((initial_velocity_x, initial_velocity_y))
-      count_of_measurements += 1
-    for n in range(10):
-      previous_coordinates = self.list_of_positions[-1]
-      previous_velocity = self.list_of_velocities[-1]
-      is_negative = previous_velocity[0] < 0
-      current_y_addition = previous_velocity[1]-1
-      if is_negative:
-        current_x_addition = previous_velocity[0]+1
-      else:
-        current_x_addition = previous_velocity[0]-1
-      current_position = (previous_coordinates[0]+current_x_addition, previous_coordinates[1]+current_y_addition)
-      current_velocity = (current_x_addition, current_y_addition)
-      self.list_of_positions.append(current_position)
-      self.list_of_velocities.append(current_velocity)
-    return(self.list_of_positions)
+  # This returns 0 if it hits the target otherwise returns the closest distance to the target
+  def launch_towards(self, target: Target):
+    last_distance_to_target = target.distance_from_target(self)
+    while True:
+      self.current_position = self.current_position.new_by_adding(self.current_velocity)
+      print('Probe position is: ', self.current_position.x, ', ', self.current_position.y)
+      new_distance_to_target = target.distance_from_target(self)
+      print('New distance to target is: ', new_distance_to_target)
+      self.current_velocity = self.current_velocity.apply_drag()
+      # Check to see if we hit
+      if new_distance_to_target == 0:
+        return 0
+      # are we still ascending to high point?
+      if self.current_velocity.y > 0:
+        continue
+      # Have we passed it?
+      if new_distance_to_target > last_distance_to_target:
+        return last_distance_to_target
+      last_distance_to_target = new_distance_to_target
+
+
 
 class Simulator:
   def __init__(self) -> None:
       pass
 
 target = Target(coordinates)
-probe = Probe()
-print(probe.launch(7,2))
+probe = Probe(7, 2)
+print('The closest we got was', probe.launch_towards(target))
