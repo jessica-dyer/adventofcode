@@ -96,14 +96,14 @@ class Probe:
       if new_distance_to_target == 0:
         self.distance = 0
         return 0
-      # are we still ascending to high point?
-      if self.current_velocity.y > 0:
-        continue
-      # Have we passed it?
-      if new_distance_to_target > last_distance_to_target:
-        self.distance = last_distance_to_target
-        return last_distance_to_target
+      # are we descending?
+      if self.current_velocity.y < 0:
+        # Have we passed it?
+        if new_distance_to_target > last_distance_to_target:
+          self.distance = last_distance_to_target
+          return last_distance_to_target
       last_distance_to_target = new_distance_to_target
+
 
 
 class Simulator:
