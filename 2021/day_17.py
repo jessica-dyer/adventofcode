@@ -49,6 +49,9 @@ class Coordinates:
   def new_by_adding(self, v):
     return Coordinates(self.x + v.x, self.y + v.y)
 
+  def __repr__(self) -> str:
+      return "(" + str(self.x) + "," + str(self.y) + ")"
+
 class Velocity(Coordinates):
   def __init__(self, x: int, y: int):
       super().__init__(x, y)
@@ -66,11 +69,16 @@ class Velocity(Coordinates):
     return Velocity(new_x_velocity, new_y_velocity)
 
 class Probe:
-  def __init__(self, initial_velocity_x, initial_velocity_y):
+  def __init__(self, initial_velocity_x, initial_velocity_y, verbose = False):
       self.initial_velocity = Velocity(initial_velocity_x, initial_velocity_y)
       self.current_velocity = self.initial_velocity
       self.current_position = Coordinates(0, 0)
       self.highest_y = 0
+      self.verbose = verbose
+      self.distance = None
+
+  def __repr__(self) -> str:
+      return "<Probe v: " + repr(self.initial_velocity) + " dist: " + str(self.distance) + ">"
 
   # This returns 0 if it hits the target otherwise returns the closest distance to the target
   def launch_towards(self, target: Target):
@@ -79,53 +87,74 @@ class Probe:
       self.current_position = self.current_position.new_by_adding(self.current_velocity)
       if self.current_position.y > self.highest_y:
         self.highest_y = self.current_position.y
-      print('Probe position is: ', self.current_position.x, ', ', self.current_position.y)
       new_distance_to_target = target.distance_from_target(self)
-      print('New distance to target is: ', new_distance_to_target)
+      if self.verbose:
+        print('Probe position is: ', self.current_position.x, ', ', self.current_position.y)
+        print('New distance to target is: ', new_distance_to_target)
       self.current_velocity = self.current_velocity.apply_drag()
       # Check to see if we hit
       if new_distance_to_target == 0:
+        self.distance = 0
         return 0
       # are we still ascending to high point?
       if self.current_velocity.y > 0:
         continue
       # Have we passed it?
       if new_distance_to_target > last_distance_to_target:
+        self.distance = last_distance_to_target
         return last_distance_to_target
       last_distance_to_target = new_distance_to_target
 
 
 class Simulator:
   def __init__(self) -> None:
-      pass
+      self.probes_that_hit = []
 # Find first x and y that possibly hits
   def find_first_x_that_possibly_hits(self, target):
     for x in range(1, target.max_x):
       y = x
       probe = Probe(x, y)
       distance = probe.launch_towards(target)
-      print('Distance is: ', distance)
+      # print('Distance is: ', distance)
       if probe.current_position.x >= target.min_x:
         return x
     "No hits were possible."
     return None
 
-# Fine all hits of the target
-  def find_best_trajectory_for_x(self, x_value, target):
-    y_value = x_value
-    probe_up = Probe(x_value, y_value + 1)
-    dist_up = probe_up.launch_towards(target)
-    print('*********************')
-    probe_flat = Probe(x_value, y_value + 0)
-    dist_flat = probe_flat.launch_towards(target)
-    print('*********************')
-    probe_down = Probe(x_value, y_value - 1)
-    dist_down = probe_down.launch_towards(target)
-    print('*********************')
+  def find_all_hits_for_x(self, x_value, target):
+    # find the first hit and then keep incrementing the y upwards until you stop getting hits
+    y_value = 1
+    was_previous_a_hit = False
+    while True:
+      probe = Probe(x_value, y_value)
+      distance = probe.launch_towards(target)
+      is_hit = distance == 0
+      if is_hit:
+        self.probes_that_hit.append(probe)
+      if was_previous_a_hit and not is_hit and y_value > x_value:
+        return
+      y_value += 1
+      was_previous_a_hit = is_hit
 
-    print('Distance for up is: ', dist_up, ' Max y was: ', probe_up.highest_y)
-    print('Distance for flat is: ', dist_flat, ' Max y was: ', probe_flat.highest_y)
-    print('Distance for down is: ', dist_down, ' Max y was: ', probe_down.highest_y)
+
+# Fine all hits of the target
+  # def find_best_trajectory_for_x(self, x_value, target):
+  #
+  #   y_value = x_value
+  #   probe_up = Probe(x_value, y_value + 1, True)
+  #   dist_up = probe_up.launch_towards(target)
+  #   print('*********************')
+  #   probe_flat = Probe(x_value, y_value + 0, True)
+  #   dist_flat = probe_flat.launch_towards(target)
+  #   print('*********************')
+  #   probe_down = Probe(x_value, y_value - 1, True)
+  #   dist_down = probe_down.launch_towards(target)
+  #   print('*********************')
+
+  #   print('Distance for up is: ', dist_up, ' Max y was: ', probe_up.highest_y)
+  #   print('Distance for flat is: ', dist_flat, ' Max y was: ', probe_flat.highest_y)
+  #   print('Distance for down is: ', dist_down, ' Max y was: ', probe_down.highest_y)
+
 
 target = Target(coordinates)
 # probe = Probe(17, -4)
@@ -134,5 +163,7 @@ target = Target(coordinates)
 sim = Simulator()
 # sim.find_best_trajectory_for_x(12, target)
 first_x = sim.find_first_x_that_possibly_hits(target)
-sim.find_best_trajectory_for_x(first_x, target)
+# sim.find_best_trajectory_for_x(first_x, target)
+sim.find_all_hits_for_x(first_x, target)
+print(sim.probes_that_hit)
 # print(first_x)
