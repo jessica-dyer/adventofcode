@@ -30,12 +30,37 @@ class Target:
     within_y = self.min_y <= y_coord <= self.max_y
     return within_x == True and within_y == True
 
-class Probe:
-  def __init__(self):
-      self.list_of_positions = [(0, 0)]
-      self.list_of_velocities = []
+class Coordinates:
+  def __init__(self, x: int, y: int):
+      self.x = x
+      self.y = y
 
-  def launch(self, initial_velocity_x, initial_velocity_y):
+  def new_by_adding(self, v):
+    return Coordinates(self.x + v.x, self.y + v.y)
+
+class Velocity(Coordinates):
+  def __init__(self, x: int, y: int):
+      super().__init__(x, y)
+
+  def apply_drag(self):
+    x_is_negative = self.x < 0
+    new_y_velocity = self.y - 1
+    if x_is_negative:
+      new_x_velocity = self.x + 1
+    else:
+      new_x_velocity = self.x - 1
+    return Velocity(new_x_velocity, new_y_velocity)
+
+
+class Probe:
+  def __init__(self, initial_velocity_x, initial_velocity_y):
+      self.initial_velocity = Velocity(initial_velocity_x, initial_velocity_y)
+      # self.list_of_positions = [(0, 0)]
+      # self.list_of_velocities = []
+      self.current_velocity = self.initial_velocity
+      self.current_position = Coordinates(0, 0)
+
+  def launch(self):
     count_of_measurements = 0
     while count_of_measurements == 0:
       position = (initial_velocity_x, initial_velocity_y)
