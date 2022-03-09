@@ -10,7 +10,7 @@ def extract_ints(raw: str):
     return map(int, re.findall(r'(-?\d+)', raw))
 
 # XMIN, XMAX, YMIN, YMAX = extract_ints("target area: x=124..174, y=-123..-86")
-XMIN, XMAX, YMIN, YMAX = extract_ints("target area: x=20..30, y=-10..-5")
+XMIN, XMAX, YMIN, YMAX = extract_ints("target area: x=124..174, y=-123..-86")
 
 print(XMIN, XMAX, YMIN, YMAX)
 
@@ -40,4 +40,4 @@ def integrate(dx, dy):
 def part_one():
     return YMIN * (YMIN + 1) // 2
 
-print(part_one())
+print(part_one()) # 7503

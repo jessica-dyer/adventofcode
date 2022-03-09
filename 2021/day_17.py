@@ -1,7 +1,7 @@
 import re
 from xxlimited import new
 
-with open('day_17_input_test.txt') as f:
+with open('day_17_input.txt') as f:
   coordinates = []
   for line in f:
     line = line.split()
