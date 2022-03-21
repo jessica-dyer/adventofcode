@@ -13,7 +13,7 @@ class Module:
     if mass <= 0:
       return 0
     else:
-      print("Calculating fuel")
+      # print("Calculating fuel")
       newly_added_fuel = floor(mass / 3) - 2
       if newly_added_fuel < 0:
         newly_added_fuel = 0
@@ -33,8 +33,8 @@ class Spacecraft:
     return total_fuel
 
 module = Module(100756)
-print(module.calculate_amount_of_fuel(module.mass))
-# spacecraft = Spacecraft()
-# for mass in list_of_module_masses:
-#   spacecraft.add_module(Module(mass))
-# print(spacecraft.calculate_total_fuel_requirements())
+# print(module.calculate_amount_of_fuel(module.mass))
+spacecraft = Spacecraft()
+for mass in list_of_module_masses:
+  spacecraft.add_module(Module(mass))
+print(spacecraft.calculate_total_fuel_requirements())
