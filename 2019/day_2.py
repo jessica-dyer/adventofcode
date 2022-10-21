@@ -21,27 +21,25 @@ class IntcodeComputer:
       self.intcode_program.input[2] = self.custom_verb
 
   def run_intcode_program(self):
-      for num in range(0, len(self.intcode_program.input), 4):
-        current_instructions = self.intcode_program.input[num:num+4]
-        current_opcode = current_instructions[0]
-        if current_opcode == 1:
-          try:
-            addition = self.intcode_program.input[current_instructions[1]] + self.intcode_program.input[current_instructions[2]]
-            return_index = current_instructions[3]
-            self.intcode_program.input[return_index] = addition
-          except IndexError:
-            return
-        elif current_opcode == 2:
-          try:
-            product = self.intcode_program.input[current_instructions[1]] * self.intcode_program.input[current_instructions[2]]
-            return_index = current_instructions[3]
-            self.intcode_program.input[return_index] = product
-          except IndexError:
-            return
-        elif current_opcode == 99:
-          return self.intcode_program
+    for num in range(0, len(self.intcode_program.input), 4):
+      current_instructions = self.intcode_program.input[num:num+4]
+      current_opcode = current_instructions[0]
+      if current_opcode == 1:
+        try:
+          addition = self.intcode_program.input[current_instructions[1]] + self.intcode_program.input[current_instructions[2]]
+          self.intcode_program.input[current_instructions[3]] = addition
+        except IndexError:
+          return
+      elif current_opcode == 2:
+        try:
+          product = self.intcode_program.input[current_instructions[1]] * self.intcode_program.input[current_instructions[2]]
+          self.intcode_program.input[current_instructions[3]] = product
+        except IndexError:
+          return
+      elif current_opcode == 99:
+        return self.intcode_program
 
-def simulator():
+def simulator():  # sourcery skip: avoid-builtin-shadow
   input = construct_input()
   program_results = []
   counter = 1
