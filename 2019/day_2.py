@@ -2,10 +2,8 @@ def construct_input():
   with open("2019/day_2_input.txt") as f:
     for line in f:
       new_line = line.split(",")
-    input = []
-    for num in new_line:
-      input.append(int(num))
-  return input
+    input_data = [int(num) for num in new_line]
+  return input_data
 
 class IntcodeProgram:
   def __init__(self, input: list):
