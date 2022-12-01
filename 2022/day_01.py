@@ -1,30 +1,20 @@
+import re
+from heapq import nlargest
+
 import aoc_helper
 
 RAW = aoc_helper.day(1)
 
-def parse_raw():
-    parsed_data = RAW.splitlines()
-    dictionary = {}
-    elf_number = 0
-    total_calories = 0
-    for item in parsed_data: 
-        if item != '': 
-            total_calories += int(item)
-        else: 
-            dictionary[elf_number] = total_calories
-            elf_number += 1
-            total_calories = 0
-    return dictionary
+def extract_ints(raw: str):
+    return map(int, re.findall(r'(-?\d+)', raw))
         
-
-DATA = parse_raw()
+CALORIES = [sum(extract_ints(elf)) for elf in RAW.split("\n\n")]
 
 def part_one():
-    return max(DATA.values())
+    return max(CALORIES)
 
 def part_two():
-    list_of_values = sorted(DATA.values())
-    return sum(list_of_values[-3:])
+    return nlargest(3, CALORIES)
 
 aoc_helper.submit(1, part_one)
 aoc_helper.submit(1, part_two)
