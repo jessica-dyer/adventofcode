@@ -1,1 +1,14 @@
-{}
+'1':
+  '1':
+    '52740': That's not the right answer; your answer is too low.  If you're stuck,
+      make sure you're using the full input data; there are also some general tips
+      on the about page, or you can ask for hints on the subreddit.  Please wait one
+      minute before trying again. (You guessed 52740.) [Return to Day 1]
+    '74711': That's the right answer!  You are one gold star closer to collecting
+      enough star fruit. [Continue to Part Two]
+    solution: '74711'
+  '2':
+    '209481': "That's the right answer!  You are one gold star closer to collecting\
+      \ enough star fruit.You have completed Day 1! You can [Shareon\n  Twitter\n\
+      Mastodon] this victory or [Return to Your Advent Calendar]."
+    solution: '209481'
