@@ -13,5 +13,5 @@ def part_one():
 def part_two():
     return nlargest(3, CALORIES)
 
-# aoc_helper.submit(1, part_one)
-# aoc_helper.submit(1, part_two)
+aoc_lube.submit(year=2022, day=1, part=1, solution=part_one)
+aoc_lube.submit(year=2022, day=1, part=2, solution=part_two)
