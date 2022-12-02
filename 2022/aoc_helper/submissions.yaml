@@ -12,3 +12,13 @@
       \ enough star fruit.You have completed Day 1! You can [Shareon\n  Twitter\n\
       Mastodon] this victory or [Return to Your Advent Calendar]."
     solution: '209481'
+'2':
+  '1':
+    '13682': That's the right answer!  You are one gold star closer to collecting
+      enough star fruit. [Continue to Part Two]
+    solution: '13682'
+  '2':
+    '12881': "That's the right answer!  You are one gold star closer to collecting\
+      \ enough star fruit.You have completed Day 2! You can [Shareon\n  Twitter\n\
+      Mastodon] this victory or [Return to Your Advent Calendar]."
+    solution: '12881'

@@ -1,6 +1,7 @@
 from heapq import nlargest
 import aoc_lube
 from aoc_lube.utils import extract_ints
+import aoc_helper
 
 CALORIES = [
     sum(extract_ints(elf))
@@ -13,5 +14,5 @@ def part_one():
 def part_two():
     return nlargest(3, CALORIES)
 
-aoc_lube.submit(year=2022, day=1, part=1, solution=part_one)
-aoc_lube.submit(year=2022, day=1, part=2, solution=part_two)
+aoc_helper.submit(day=1, solution=part_one)
+aoc_helper.submit(day=1, solution=part_two)
