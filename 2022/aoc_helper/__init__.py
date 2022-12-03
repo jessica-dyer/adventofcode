@@ -22,6 +22,7 @@ __all__ = (
 
 TOKEN = {"session": TOKEN_FILE.read_text().strip()}
 
+
 def day(d: int) -> str:
     """
     Return the input for day `d`. Inputs are cached.
@@ -43,6 +44,7 @@ def day(d: int) -> str:
     inputs[day] = response.text.strip()
     INPUTS_FILE.write_text(yaml.dump(inputs, default_style="|"))
     return inputs[day]
+
 
 def submit(day: int, solution: Callable, sanity_check=True):
     """
@@ -76,14 +78,13 @@ def submit(day: int, solution: Callable, sanity_check=True):
     solution = str(solution)
 
     if solution in current:
-        print(f"Solution {solution} to part {part} has already been submitted, response was:")
+        print(
+            f"Solution {solution} to part {part} has already been submitted, response was:"
+        )
         _pretty_print(current[solution])
         return
 
-    if (
-        sanity_check
-        and input(f"Submit {solution}? [y]/n\n").startswith(("n", "N"))
-    ):
+    if sanity_check and input(f"Submit {solution}? [y]/n\n").startswith(("n", "N")):
         return
 
     while True:
@@ -91,7 +92,7 @@ def submit(day: int, solution: Callable, sanity_check=True):
         response = requests.post(
             url=URL.format(day=day) + "/answer",
             cookies=TOKEN,
-            data={"level": part, "answer": solution}
+            data={"level": part, "answer": solution},
         )
 
         if not response.ok:
@@ -118,6 +119,7 @@ def submit(day: int, solution: Callable, sanity_check=True):
     current[solution] = message
     SUBMISSIONS_FILE.write_text(yaml.dump(submissions))
 
+
 def _wait_for_unlock(d):
     now = datetime.now().astimezone()
     unlock = datetime(year=YEAR, day=d, **UNLOCK_TIME_INFO)
@@ -139,9 +141,10 @@ def _wait_for_unlock(d):
                     end="\r",
                 )
 
-                time.sleep(.1)
+                time.sleep(0.1)
         finally:
             print("\x1b[?25h")  # Show cursor.
+
 
 def _pretty_print(message):
     match message[7]:

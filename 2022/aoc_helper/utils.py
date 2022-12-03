@@ -25,11 +25,23 @@ DELTAS_5 = DELTAS_4 + ((0, 0),)
 DELTAS_8 = DELTAS_4 + ((1, 1), (-1, -1), (1, -1), (-1, 1))
 DELTAS_9 = DELTAS_8 + ((0, 0),)
 
+
+def parts(l, n):
+    """Splits l into n equal parts. Excess (if it exists) returned as the n+1-th."""
+    m = len(l) // n
+    for i in range(n):
+        yield l[i * m : (i + 1) * m]
+
+    if len(l) % n != 0:
+        yield l[m * n :]
+
+
 def group_by_n(iter: list, n: int) -> list:
     """
     Group items in a list by n numbers with no overlap.
     """
     return [iter[i * n : (i + 1) * n] for i in range((len(iter) + n - 1) // n)]
+
 
 def extract_ints(raw: str):
     """
@@ -37,7 +49,8 @@ def extract_ints(raw: str):
     """
     import re
 
-    return map(int, re.findall(r'(-?\d+)', raw))
+    return map(int, re.findall(r"(-?\d+)", raw))
+
 
 def extract_maze(raw: str, wall="#", largest_component=False):
     """
@@ -48,9 +61,7 @@ def extract_maze(raw: str, wall="#", largest_component=False):
 
     lines = raw.splitlines()
     max_width = max(map(len, lines))
-    maze = np.array(
-        [list(line + " " * (max_width - len(line))) for line in lines]
-    )
+    maze = np.array([list(line + " " * (max_width - len(line))) for line in lines])
 
     G = nx.grid_graph(maze.shape[::-1])
 
@@ -58,9 +69,12 @@ def extract_maze(raw: str, wall="#", largest_component=False):
     G.remove_nodes_from(map(tuple, walls))
 
     if largest_component:
-        G.remove_nodes_from(G.nodes - max(nx.connected_components(G), key=lambda g: len(g)))
+        G.remove_nodes_from(
+            G.nodes - max(nx.connected_components(G), key=lambda g: len(g))
+        )
 
     return maze, G
+
 
 def maximum_matching(items: dict[list]):
     """
@@ -74,6 +88,7 @@ def maximum_matching(items: dict[list]):
         if k in items:  # Filter edges pointing the wrong direction.
             yield k, v
 
+
 def get_direction_enum():
     """
     Return an enum for Directions with a rotate method.
@@ -81,9 +96,9 @@ def get_direction_enum():
     from enum import IntEnum
 
     class Direction(IntEnum):
-        EAST  = E = 0
+        EAST = E = 0
         NORTH = N = 1
-        WEST  = W = 2
+        WEST = W = 2
         SOUTH = S = 3
 
         def rotate(self, steps=1, clockwise=False):
@@ -93,15 +108,20 @@ def get_direction_enum():
 
     return Direction
 
+
 def chinese_remainder_theorem(moduli, residues):
     from math import prod
 
     N = prod(moduli)
 
-    return sum(
-        (div := (N // modulus)) * pow(div, -1, modulus) * residue
-        for modulus, residue in zip(moduli, residues)
-    ) % N
+    return (
+        sum(
+            (div := (N // modulus)) * pow(div, -1, modulus) * residue
+            for modulus, residue in zip(moduli, residues)
+        )
+        % N
+    )
+
 
 def pairwise(iterable, offset=1):
     """
@@ -113,18 +133,17 @@ def pairwise(iterable, offset=1):
 
     return zip(a, islice(b, offset, None))
 
+
 def sliding_window(iterable, length=2):
     """
     Return a sliding window over iterable.
     """
     from itertools import islice, tee
 
-    its = (
-        islice(it, i, None)
-        for i, it in enumerate(tee(iterable, length))
-    )
+    its = (islice(it, i, None) for i, it in enumerate(tee(iterable, length)))
 
     return zip(*its)
+
 
 def oscillate_range(start=None, stop=None, step=None, /):
     """
@@ -153,6 +172,7 @@ def oscillate_range(start=None, stop=None, step=None, /):
         yield start - step * n
         n += 1
 
+
 def int_grid(raw, np=True, separator=""):
     """
     Parse a grid of ints into a 2d list or numpy array (if np==True).
@@ -169,12 +189,14 @@ def int_grid(raw, np=True, separator=""):
 
     return array
 
+
 def dot_print(array):
     """
     Pretty print a binary or boolean array.
     """
     for row in array:
         print("".join(" #"[i] for i in row))
+
 
 def shiftmod(n, m, shift=1):
     """

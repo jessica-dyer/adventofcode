@@ -1,22 +1,22 @@
 import aoc_helper
 import string
+from aoc_helper.utils import parts, group_by_n
 
 RAW = aoc_helper.day(3)
 RUCKSACKS = list(RAW.splitlines())
 
-split_rucksacks = [
-    (sack[: len(sack) // 2], sack[len(sack) // 2 :]) for sack in RUCKSACKS
-]
+uppercase_letters = dict(zip(string.ascii_uppercase, range(27, 53)))
+letters = dict(zip(string.ascii_lowercase, range(1, 27))) | uppercase_letters
+
+split_rucksacks = [(parts(sack, n=2)) for sack in RUCKSACKS]
+
 unique_letters = [
     "".join(set(compartment_one) & set(compartment_two))
     for compartment_one, compartment_two in split_rucksacks
 ]
 
-uppercase_letters = dict(zip(string.ascii_uppercase, range(27, 53)))
-letters = dict(zip(string.ascii_lowercase, range(1, 27))) | uppercase_letters
+groups_of_three = group_by_n(iter=RUCKSACKS, n=3)
 
-
-groups_of_three = aoc_helper.utils.group_by_n(iter=RUCKSACKS, n=3)
 security_for_elves = [
     "".join(set(first) & set(second) & set(third))
     for first, second, third in groups_of_three
