@@ -1,3 +1,6 @@
+from functools import total_ordering
+import math 
+
 """
 Useful functions for AoC. Note deferred imports.
 
@@ -26,7 +29,7 @@ DELTAS_8 = DELTAS_4 + ((1, 1), (-1, -1), (1, -1), (-1, 1))
 DELTAS_9 = DELTAS_8 + ((0, 0),)
 
 
-def parts(l, n):
+def parts(l, n: int):
     """Splits l into n equal parts. Excess (if it exists) returned as the n+1-th."""
     m = len(l) // n
     for i in range(n):
@@ -209,3 +212,120 @@ def shiftmod(n, m, shift=1):
         shiftmod(12, 10, shift=2) == 2
     """
     return (n - shift) % m + shift
+
+@total_ordering
+class Point:
+    """Simple 2-dimensional point."""
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __add__(self, other):
+        return Point(self.x + other.x, self.y + other.y)
+
+    def __sub__(self, other):
+        return Point(self.x - other.x, self.y - other.y)
+
+    def __mul__(self, n):
+        return Point(self.x * n, self.y * n)
+
+    def __div__(self, n):
+        return Point(self.x / n, self.y / n)
+
+    def __neg__(self):
+        return Point(-self.x, -self.y)
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+    def __ne__(self, other):
+        return not self == other
+
+    def __lt__(self, other):
+        return self.length < other.length
+
+    def __str__(self):
+        return f"({self.x}, {self.y})"
+
+    def __repr__(self):
+        return f"Point({self.x}, {self.y})"
+
+    def __hash__(self):
+        return hash((self.x, self.y))
+
+    def dist(self, other):
+        return math.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)
+
+    def dist_manhattan(self, other):
+        return abs(self.x - other.x) + abs(self.y - other.y)
+
+    def angle(self, to=None):
+        if to is None:
+            return math.atan2(self.y, self.x)
+        return math.atan2(self.y - to.y, self.x - to.x)
+
+    def rotate(self, turns):
+        """Returns the rotation of the Point around (0, 0) `turn` times clockwise."""
+        turns = turns % 4
+
+        if turns == 1:
+            return Point(self.y, -self.x)
+        elif turns == 2:
+            return Point(-self.x, -self.y)
+        elif turns == 3:
+            return Point(-self.y, self.x)
+        else:
+            return self
+
+    @property
+    def manhattan(self):
+        return abs(self.x) + abs(self.y)
+
+    @property
+    def length(self):
+        return math.sqrt(self.x ** 2 + self.y ** 2)
+
+    def neighbours_4(self):
+        return [self + p for p in DIRS_4]
+
+    def neighbors_4(self):
+        return self.neighbours_4()
+
+    def neighbours(self):
+        return self.neighbours_4()
+
+    def neighbors(self):
+        return self.neighbours()
+
+    def neighbours_8(self):
+        return [self + p for p in DIRS_8]
+
+    def neighbors_8(self):
+        return self.neighbours_8()
+
+N = Point(0, 1)
+NE = Point(1, 1)
+E = Point(1, 0)
+SE = Point(1, -1)
+S = Point(0, -1)
+SW = Point(-1, -1)
+W = Point(-1, 0)
+NW = Point(-1, 1)
+
+DIRS_4 = DIRS = [
+    Point(0, 1),   # north
+    Point(1, 0),   # east
+    Point(0, -1),  # south
+    Point(-1, 0),  # west
+]
+
+DIRS_8 = [
+    Point(0, 1),    # N
+    Point(1, 1),    # NE
+    Point(1, 0),    # E
+    Point(1, -1),   # SE
+    Point(0, -1),   # S
+    Point(-1, -1),  # SW
+    Point(-1, 0),   # W
+    Point(-1, 1),   # NW
+]
