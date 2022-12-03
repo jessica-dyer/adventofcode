@@ -1,16 +1,12 @@
 import aoc_helper
-import aoc_lube.utils
 
 RAW = aoc_helper.day(2)
 POINTS_FOR_DRAW = 3
 POINTS_FOR_WIN = 6
-ROCK = 1
-PAPER = 2
-SCISSORS = 3
 
 points = dict(
-    A=ROCK, B=PAPER, C=SCISSORS, 
-    X=ROCK, Y=PAPER, Z=SCISSORS
+    A=0, B=1, C=2, 
+    X=0, Y=1, Z=2
 )
 
 GAMES = [
@@ -18,39 +14,24 @@ GAMES = [
     for a, _, b in RAW.splitlines()
 ]
 
-def i_won(a: int, b: int)->bool: 
-    if b == SCISSORS and a == PAPER: 
-        return True
-    return True if b == PAPER and a == ROCK else b == ROCK and a == SCISSORS
-
-def is_draw(a: int, b: int)-> bool: 
-    return a == b
-
 def score(a: int, b: int) -> int: 
-    if i_won(a, b): 
-        return POINTS_FOR_WIN + b
-    elif is_draw(a, b): 
-        return POINTS_FOR_DRAW + b
-    return b
+    score = 0
+    if a == b:
+        score += POINTS_FOR_DRAW
+    elif (b - a) % 3 == 1:
+        score += POINTS_FOR_WIN
+    score += b + 1
+    return score
 
-def return_losing_int(a: int) -> int: 
-    pick = a - 1
-    return SCISSORS if pick < ROCK else pick
-
-def return_winning_int(a: int) -> int: 
-    pick = a + 1
-    return ROCK if pick > SCISSORS else pick
-
-def return_int_for_draw(a: int) -> int: 
-    return a 
-
-def score_two(a: int, b: int) -> int: 
-    if b == ROCK: 
-        return return_losing_int(a=a)
-    elif b == PAPER: 
-        return return_int_for_draw(a=a) + POINTS_FOR_DRAW
-    else: 
-        return return_winning_int(a=a) + POINTS_FOR_WIN
+def score_two(a: int, b: int) -> int:
+    score = 0
+    if b == 0:
+        score += (a - 1) % 3 + 1
+    elif b == 1:
+        score += POINTS_FOR_DRAW + a + 1
+    else:
+        score += POINTS_FOR_WIN + (a + 1) % 3 + 1
+    return score
 
 def part_one() -> int:
     return sum(score(a, b) for a, b in GAMES)
