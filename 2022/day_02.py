@@ -52,10 +52,10 @@ def score_two(a: int, b: int) -> int:
     else: 
         return return_winning_int(a=a) + POINTS_FOR_WIN
 
-def part_one():
+def part_one() -> int:
     return sum(score(a, b) for a, b in GAMES)
 
-def part_two():
+def part_two() -> int:
     return sum(score_two(a, b) for a, b in GAMES)
 
 aoc_helper.submit(2, part_one)
