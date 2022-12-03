@@ -2,6 +2,8 @@ import aoc_helper
 import aoc_lube.utils
 
 RAW = aoc_helper.day(2)
+POINTS_FOR_DRAW = 3
+POINTS_FOR_WIN = 6
 
 points = dict(
     A=0, B=1, C=2, 
@@ -23,29 +25,29 @@ def is_draw(a: int, b: int)-> bool:
 
 def score(a: int, b: int) -> int: 
     if i_won(a, b): 
-        return 6 + b + 1
+        return POINTS_FOR_WIN + b + 1
     elif is_draw(a, b): 
-        return 3 + b + 1
+        return POINTS_FOR_DRAW + b + 1
     return b + 1
 
-def lose(a: int) -> int: 
+def return_losing_int(a: int) -> int: 
     pick = a - 1
     return 2 if pick < 0 else pick
 
-def win(a: int) -> int: 
+def return_winning_int(a: int) -> int: 
     pick = a + 1
     return 0 if pick > 2 else pick
 
-def draw(a: int) -> int: 
+def return_int_for_draw(a: int) -> int: 
     return a 
 
 def score_two(a: int, b: int) -> int: 
     if b == 0: 
-        return lose(a=a) + 1
+        return return_losing_int(a=a) + 1
     elif b == 1: 
-        return draw(a=a) + 3 + 1
+        return return_int_for_draw(a=a) + POINTS_FOR_DRAW + 1
     else: 
-        return win(a=a) + 6 + 1
+        return return_winning_int(a=a) + POINTS_FOR_WIN + 1
 
 def part_one():
     return sum(score(a, b) for a, b in GAMES)
