@@ -25,6 +25,12 @@ DELTAS_5 = DELTAS_4 + ((0, 0),)
 DELTAS_8 = DELTAS_4 + ((1, 1), (-1, -1), (1, -1), (-1, 1))
 DELTAS_9 = DELTAS_8 + ((0, 0),)
 
+def group_by_n(iter: list, n: int) -> list:
+    """
+    Group items in a list by n numbers with no overlap.
+    """
+    return [iter[i * n : (i + 1) * n] for i in range((len(iter) + n - 1) // n)]
+
 def extract_ints(raw: str):
     """
     Extract integers from a string.
