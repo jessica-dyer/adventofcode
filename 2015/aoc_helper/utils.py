@@ -1,5 +1,5 @@
 from functools import total_ordering
-import math 
+import math
 
 """
 Useful functions for AoC. Note deferred imports.
@@ -28,12 +28,14 @@ DELTAS_5 = DELTAS_4 + ((0, 0),)
 DELTAS_8 = DELTAS_4 + ((1, 1), (-1, -1), (1, -1), (-1, 1))
 DELTAS_9 = DELTAS_8 + ((0, 0),)
 
+
 def chunk(it, n: int):
     """
     Chunk an iterable into non-overlapping fixed sized pieces.
     """
     args = [iter(it)] * n
     return zip(*args, strict=True)
+
 
 def parts(l, n: int):
     """Splits l into n equal parts. Excess (if it exists) returned as the n+1-th."""
@@ -219,9 +221,11 @@ def shiftmod(n, m, shift=1):
     """
     return (n - shift) % m + shift
 
+
 @total_ordering
 class Point:
     """Simple 2-dimensional point."""
+
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -289,7 +293,7 @@ class Point:
 
     @property
     def length(self):
-        return math.sqrt(self.x ** 2 + self.y ** 2)
+        return math.sqrt(self.x**2 + self.y**2)
 
     def neighbours_4(self):
         return [self + p for p in DIRS_4]
@@ -309,6 +313,7 @@ class Point:
     def neighbors_8(self):
         return self.neighbours_8()
 
+
 N = Point(0, 1)
 NE = Point(1, 1)
 E = Point(1, 0)
@@ -319,19 +324,19 @@ W = Point(-1, 0)
 NW = Point(-1, 1)
 
 DIRS_4 = DIRS = [
-    Point(0, 1),   # north
-    Point(1, 0),   # east
+    Point(0, 1),  # north
+    Point(1, 0),  # east
     Point(0, -1),  # south
     Point(-1, 0),  # west
 ]
 
 DIRS_8 = [
-    Point(0, 1),    # N
-    Point(1, 1),    # NE
-    Point(1, 0),    # E
-    Point(1, -1),   # SE
-    Point(0, -1),   # S
+    Point(0, 1),  # N
+    Point(1, 1),  # NE
+    Point(1, 0),  # E
+    Point(1, -1),  # SE
+    Point(0, -1),  # S
     Point(-1, -1),  # SW
-    Point(-1, 0),   # W
-    Point(-1, 1),   # NW
+    Point(-1, 0),  # W
+    Point(-1, 1),  # NW
 ]

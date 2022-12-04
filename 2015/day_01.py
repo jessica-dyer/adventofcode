@@ -9,6 +9,7 @@ DATA = tuple(accumulate(1 if c == "(" else -1 for c in RAW))
 def part_one():
     return DATA[-1]
 
+
 def part_two():
     return DATA.index(-1) + 1
 
