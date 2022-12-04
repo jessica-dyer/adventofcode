@@ -8,3 +8,13 @@
       \ weather machine.You have completed Day 1! You can [Shareon\n  Twitter\nMastodon]\
       \ this victory or [Return to Your Advent Calendar]."
     solution: '1771'
+'2':
+  '1':
+    '1598415': That's the right answer!  You are one gold star closer to powering
+      the weather machine. [Continue to Part Two]
+    solution: '1598415'
+  '2':
+    '3812909': "That's the right answer!  You are one gold star closer to powering\
+      \ the weather machine.You have completed Day 2! You can [Shareon\n  Twitter\n\
+      Mastodon] this victory or [Return to Your Advent Calendar]."
+    solution: '3812909'

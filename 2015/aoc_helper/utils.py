@@ -28,6 +28,12 @@ DELTAS_5 = DELTAS_4 + ((0, 0),)
 DELTAS_8 = DELTAS_4 + ((1, 1), (-1, -1), (1, -1), (-1, 1))
 DELTAS_9 = DELTAS_8 + ((0, 0),)
 
+def chunk(it, n: int):
+    """
+    Chunk an iterable into non-overlapping fixed sized pieces.
+    """
+    args = [iter(it)] * n
+    return zip(*args, strict=True)
 
 def parts(l, n: int):
     """Splits l into n equal parts. Excess (if it exists) returned as the n+1-th."""
