@@ -54,3 +54,13 @@
       \ star fruit.You have completed Day 4! You can [Shareon\n  Twitter\nMastodon]\
       \ this victory or [Return to Your Advent Calendar]."
     solution: '847'
+'5':
+  '1':
+    VPCDMSLWJ: That's the right answer!  You are one gold star closer to collecting
+      enough star fruit. [Continue to Part Two]
+    solution: VPCDMSLWJ
+  '2':
+    TPWCGNCCG: "That's the right answer!  You are one gold star closer to collecting\
+      \ enough star fruit.You have completed Day 5! You can [Shareon\n  Twitter\n\
+      Mastodon] this victory or [Return to Your Advent Calendar]."
+    solution: TPWCGNCCG
