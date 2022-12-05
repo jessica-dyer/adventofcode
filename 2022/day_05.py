@@ -1,6 +1,5 @@
 import aoc_helper
 
-RAW = aoc_helper.day(5).splitlines()
 board, moves = aoc_helper.day(5).split("\n\n")
 MOVES = [tuple((aoc_helper.utils.extract_ints(move))) for move in moves.split("\n")]
 
