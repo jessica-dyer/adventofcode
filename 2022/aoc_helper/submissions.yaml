@@ -64,3 +64,17 @@
       \ enough star fruit.You have completed Day 5! You can [Shareon\n  Twitter\n\
       Mastodon] this victory or [Return to Your Advent Calendar]."
     solution: TPWCGNCCG
+'6':
+  '1':
+    '1623': That's the right answer!  You are one gold star closer to collecting enough
+      star fruit. [Continue to Part Two]
+    solution: '1623'
+  '2':
+    '3774': "That's the right answer!  You are one gold star closer to collecting\
+      \ enough star fruit.You have completed Day 6! You can [Shareon\n  Twitter\n\
+      Mastodon] this victory or [Return to Your Advent Calendar]."
+    '472': That's not the right answer.  If you're stuck, make sure you're using the
+      full input data; there are also some general tips on the about page, or you
+      can ask for hints on the subreddit.  Please wait one minute before trying again.
+      (You guessed 472.) [Return to Day 6]
+    solution: '3774'
