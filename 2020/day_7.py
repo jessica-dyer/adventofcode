@@ -138,10 +138,7 @@ def number_of_bags_within(outer_bag_color: str):
 
 # Returns a bag rule object
 def get_rule_for_bag_color(bag_color: str):
-    for bag_rule in bag_rules:
-        if bag_rule.bag_color == bag_color:
-            return bag_rule
-    return None
+    return next((bag_rule for bag_rule in bag_rules if bag_rule.bag_color == bag_color), None)
 
 # dark olive bags contain 7 other bags: 3 faded blue bags and 4 dotted black bags
 # for each inner bag, find out how many bags that color contains and then multiply it by the number of inner bag

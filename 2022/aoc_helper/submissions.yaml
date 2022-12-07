@@ -78,3 +78,13 @@
       can ask for hints on the subreddit.  Please wait one minute before trying again.
       (You guessed 472.) [Return to Day 6]
     solution: '3774'
+'7':
+  '1':
+    '1845346': That's the right answer!  You are one gold star closer to collecting
+      enough star fruit. [Continue to Part Two]
+    solution: '1845346'
+  '2':
+    '3636703': "That's the right answer!  You are one gold star closer to collecting\
+      \ enough star fruit.You have completed Day 7! You can [Shareon\n  Twitter\n\
+      Mastodon] this victory or [Return to Your Advent Calendar]."
+    solution: '3636703'
