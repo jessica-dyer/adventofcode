@@ -1,0 +1,36 @@
+Metadata-Version: 2.1
+Name: aoc-lube
+Version: 0.2.6
+Summary: Proper Advent of Code lubricant.
+Author-email: salt-die <salt-die@protonmail.com>
+License: Unlicense
+Project-URL: repository, https://github.com/salt-die/aoc_lube
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: beautifulsoup4 (>=4.11.1)
+Requires-Dist: requests (>=2.28.1)
+Requires-Dist: tomlkit (>=0.11.6)
+Provides-Extra: utils
+Requires-Dist: networkx (>=2.8.8) ; extra == 'utils'
+Requires-Dist: numpy (>=1.23.4) ; extra == 'utils'
+
+# aoc_lube - Proper *Advent of Code* lubricant.
+
+Setting up aoc_lube
+---------------------
+* `pip install aoc-lube` for just `fetch` and `submit` functions or `pip install aoc-lube[utils]` for optional dependencies (networkx, numpy) for utility functions.
+* Save your user token to `~/.aoc_lube/.token`.
+* [Optional] Create a new directory for your solutions. In this directory, run `aoc_lube.setup_dir`.
+
+Getting your user token
+-----------------------
+* Navigate to https://adventofcode.com/. Make sure you are logged in.
+* Right-click the page and click `Inspect`.
+* Click on the `Network` tab.
+* Reload the page.
+* The token will be the session cookie in the request header to the page. It's a long hex string.
+
+![User Token](token.png)

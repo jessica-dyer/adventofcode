@@ -13,4 +13,4 @@ termcolor==2.0.1
 tzdata==2022.5
 tzlocal==4.2
 urllib3==1.26.12
-aoc_lube==
+aoc_lube
