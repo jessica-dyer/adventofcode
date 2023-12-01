@@ -47,7 +47,7 @@ def extract_real_digits(s):
         "eight": 8,
         "nine": 9,
     }
-    word_matches = re.findall(r"one|two|three|four|five|six|seven|eight|nine|\\d", s)
+    word_matches = re.findall(r"one|two|three|four|five|six|seven|eight|nine|\d", s)
     replaced_string = ""
     for word in word_matches:
         if word.isdigit():
@@ -72,6 +72,7 @@ def part_2() -> int:
         digits = [*map(f, re.findall(p, x))]
         t += int(digits[0] + digits[-1])
     return t
+
 
 
 def parse_args() -> argparse.Namespace:
