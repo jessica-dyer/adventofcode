@@ -47,7 +47,9 @@ def extract_real_digits(s):
         "eight": 8,
         "nine": 9,
     }
-    word_matches = re.findall(r"one|two|three|four|five|six|seven|eight|nine|\d", s)
+    n = "one two three four five six seven eight nine".split()
+    match = "(?=(" + "|".join(n) + "|\\d))"
+    word_matches = re.findall(match, s)
     replaced_string = ""
     for word in word_matches:
         if word.isdigit():
@@ -60,17 +62,8 @@ def extract_real_digits(s):
 def part_2() -> int:
     input_list = INPUT.splitlines()
     t = 0
-    n = "one two three four five six seven eight nine".split()
-    p = "(?=(" + "|".join(n) + "|\\d))"
-
-    def f(x):
-        if x in n:
-            return str(n.index(x) + 1)
-        return x
-
-    for x in input_list:
-        digits = [*map(f, re.findall(p, x))]
-        t += int(digits[0] + digits[-1])
+    for x in input_list: 
+        t += extract_real_digits(x)
     return t
 
 
@@ -93,4 +86,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    part_2()
+    print(part_2())
