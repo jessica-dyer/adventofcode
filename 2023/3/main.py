@@ -68,6 +68,9 @@ def find_symbol(y, match):
 
 
 def part2():
+    """
+    Got this solution from someone else. Learned some things!
+    """
     MATCHES = [list(re.finditer(r"(\d+)", line)) for line in GRID]
     SYMBOLS = {}
 
