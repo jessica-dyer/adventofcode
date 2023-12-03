@@ -1,16 +1,16 @@
+from aockit import get_input
+
 import argparse
 from pathlib import Path
 import re
 
 PROD = True
 
-fp = "/Users/jessica.dyer@leveltenenergy.com/Repositories/adventofcode/2023/python/01/input.txt"
 
-
-def load_input(fp: str | None):
-    if fp:
-        return Path(fp).read_text()
-    return (Path() / "input.txt").read_text()
+def load_input():
+    script_path = Path(__file__).resolve().parent
+    input_path = script_path / "input.txt"
+    return input_path.read_text()
 
 
 TEST_INPUT = """two1nine
@@ -22,7 +22,7 @@ zoneight234
 7pqrstsixteen
 """
 
-INPUT = load_input(fp=fp) if PROD else TEST_INPUT
+INPUT = load_input() if PROD else TEST_INPUT
 
 
 def part_1() -> int:
@@ -62,10 +62,9 @@ def extract_real_digits(s):
 def part_2() -> int:
     input_list = INPUT.splitlines()
     t = 0
-    for x in input_list: 
+    for x in input_list:
         t += extract_real_digits(x)
     return t
-
 
 
 def parse_args() -> argparse.Namespace:
@@ -86,4 +85,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    print(part_2())
+    part_1()
+    part_2()

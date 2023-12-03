@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "adventofcode"
+version = "0.1.0"
+description = ""
+authors = ["Jessica Dyer <jessica.dyer@leveltenenergy.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+aoc-helper = {extras = ["cli"], version = "^1.8.14"}
+aoc = "^1.0.1"
+black = "^23.11.0"
+ruff = "^0.1.6"
+aoc-lube = "^1.0.0"
+aoc-kit = "^0.1.5"
+
+
+[tool.poetry.group.dev.dependencies]
+aoc-helper = "^1.8.14"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
