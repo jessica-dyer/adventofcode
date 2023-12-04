@@ -13,6 +13,7 @@ black = "^23.11.0"
 ruff = "^0.1.6"
 aoc-lube = "^1.0.0"
 aoc-kit = "^0.1.5"
+numpy = "^1.26.2"
 
 
 [tool.poetry.group.dev.dependencies]
