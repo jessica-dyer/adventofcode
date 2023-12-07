@@ -5,6 +5,7 @@ PROD = False
 TEST_DATA = """"""
 INPUT_DATA = PROD_DATA if PROD else TEST_DATA
 
+
 def part1():
     data = get_input(2023, 8)
 
