@@ -3,7 +3,7 @@ import numpy as np
 from itertools import combinations
 
 PROD_DATA = get_input(2023, 11)
-PROD = True
+PROD = False
 TEST_DATA = """...#......
 .......#..
 #.........
