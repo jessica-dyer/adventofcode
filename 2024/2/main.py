@@ -56,19 +56,11 @@ def is_valid_sequence_part_two(numbers):
     return False
 
 def part1():
-    safe_reports = 0
-    for r in PARSED_INPUT:
-        if is_valid_sequence(r):
-            safe_reports += 1
-    return safe_reports
+    return sum(1 for r in PARSED_INPUT if is_valid_sequence(r))
 
 
 def part2():
-    safe_reports = 0
-    for r in PARSED_INPUT:
-        if is_valid_sequence_part_two(r):
-            safe_reports += 1
-    return safe_reports
+    return sum(1 for r in PARSED_INPUT if is_valid_sequence_part_two(r))
 
 
 
