@@ -1,4 +1,3 @@
-from aocd import data
 from pathlib import Path
 
 PROD = 1
