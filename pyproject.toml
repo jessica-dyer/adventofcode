@@ -1,10 +1,8 @@
 [tool.poetry]
 name = "adventofcode"
 version = "0.1.0"
-description = ""
-authors = ["Jessica Dyer <jessica.dyer@leveltenenergy.com>"]
-readme = "README.md"
-package-mode = false
+
+packages = [{ include = "lib" }]
 
 [tool.poetry.dependencies]
 python = ">=3.12,<4.0"
@@ -26,3 +24,13 @@ aoc-helper = "^1.8.14"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+exclude = '''
+/(
+    \.archive
+)/
+'''
+
+[tool.ruff]
+exclude = [".archive"]
