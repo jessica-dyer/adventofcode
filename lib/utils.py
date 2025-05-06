@@ -1,17 +1,12 @@
 from pathlib import Path
 from aocd import get_data
+from dotenv import load_dotenv
 import os
-
-# Get the session token
-SESSION = os.getenv("AOC_TOKEN")
 
 
 def load_input(year: int, day: int) -> str:
-    from dotenv import load_dotenv
-    import os
-
     load_dotenv()
-    session = os.getenv("SESSION_TOKEN")
+    session = os.getenv("AOC_TOKEN")
 
     input_path = (
         Path(__file__).resolve().parent.parent / "data" / str(year) / f"day{day:02}.txt"
