@@ -1,6 +1,6 @@
 from lib.utils import load_input
 
-PROD = False
+PROD = True
 
 TEST_INPUT = """
 47|53
@@ -33,6 +33,34 @@ TEST_INPUT = """
 97,13,75,29,47
 """
 
+
+def is_valid(update: list[int], rules: tuple[int, int]) -> int:
+    # For each (a, b) rule, if both a and b are present in the update, then the index of a must be less than the index of b.
+    index_map = {page: i for i, page in enumerate(update)}
+    for a, b in rules:
+        if a in index_map and b in index_map:
+            if index_map[a] > index_map[b]:
+                return None
+    middle_num = len(update) // 2
+    return update[middle_num]
+
+
+def part_one():
+    total = 0
+    rules_and_arrays = INPUT.strip().split("\n\n")
+    rules = [
+        tuple(map(int, rule.split("|")))
+        for rule in rules_and_arrays[0].strip().split("\n")
+    ]
+    arrays_to_check = [
+        list(map(int, r.split(","))) for r in rules_and_arrays[1].strip().splitlines()
+    ]
+    for array in arrays_to_check:
+        if is_valid(array, rules):
+            total += is_valid(array, rules)
+    return total
+
+
 if __name__ == "__main__":
     _ = load_input(year=2024, day=5)
 
@@ -40,3 +68,5 @@ if __name__ == "__main__":
         INPUT = load_input(year=2024, day=5)
     else:
         INPUT = TEST_INPUT
+
+    print(part_one())
