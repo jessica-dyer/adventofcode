@@ -45,6 +45,24 @@ def is_valid(update: list[int], rules: tuple[int, int]) -> int:
     return update[middle_num]
 
 
+def order(update: list[int], rules: tuple[int, int]) -> list[int]:
+    changed = True
+    while changed:
+        changed = False
+        index_map = {page: i for i, page in enumerate(update)}
+        for a, b in rules:
+            if a in index_map and b in index_map:
+                if index_map[a] > index_map[b]:
+                    # swap and flag that we made a change
+                    update[index_map[a]], update[index_map[b]] = (
+                        update[index_map[b]],
+                        update[index_map[a]],
+                    )
+                    changed = True
+                    break  # start over from the beginning of the rules
+    return update
+
+
 def part_one():
     total = 0
     rules_and_arrays = INPUT.strip().split("\n\n")
@@ -61,12 +79,29 @@ def part_one():
     return total
 
 
+def part_two():
+    total = 0
+    rules_and_arrays = INPUT.strip().split("\n\n")
+    rules = [
+        tuple(map(int, rule.split("|")))
+        for rule in rules_and_arrays[0].strip().split("\n")
+    ]
+    arrays_to_check = [
+        list(map(int, r.split(","))) for r in rules_and_arrays[1].strip().splitlines()
+    ]
+    for array in arrays_to_check:
+        if not is_valid(array, rules):
+            ordered_list = order(array, rules)
+            middle_num = len(ordered_list) // 2
+            total += ordered_list[middle_num]
+    return total
+
+
 if __name__ == "__main__":
     _ = load_input(year=2024, day=5)
-
     if PROD:
         INPUT = load_input(year=2024, day=5)
     else:
         INPUT = TEST_INPUT
-
     print(part_one())
+    print(part_two())
